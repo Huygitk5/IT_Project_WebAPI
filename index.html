@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Showcase - Final Project</title>
+    <style>
+        :root {
+            --bg-dark: #1e1e1e;
+            --bg-panel: #252526;
+            --text-color: #cccccc;
+            --accent-color: #3776ab;
+            --border-color: #3e3e42;
+            --term-color: #d4d4d4;
+            --highlight: #4ec9b0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* NAVIGATION */
+        .nav-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .api-btn {
+            background-color: var(--bg-panel);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.2s;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        .api-btn:hover, .api-btn.active {
+            background-color: #007acc;
+            color: white;
+            border-color: #007acc;
+        }
+
+        /* DEV CONTAINER */
+        .dev-container {
+            display: flex;
+            flex: 1;
+            gap: 15px;
+            min-height: 400px;
+            margin-bottom: 15px;
+        }
+
+        .editor-window {
+            flex: 1;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .window-header {
+            background-color: var(--bg-panel);
+            padding: 0 10px;
+            height: 35px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .run-btn {
+            background-color: transparent;
+            color: #4caf50;
+            border: none;
+            padding: 4px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .run-btn:hover { background-color: #3e3e42; border-radius: 3px; }
+
+        textarea.code-input {
+            flex: 1;
+            background-color: var(--bg-dark);
+            color: #9cdcfe;
+            border: none;
+            padding: 15px;
+            font-family: 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+            white-space: pre;
+        }
+        textarea.code-input:focus { background-color: #1a1a1a; }
+
+        /* --- SỬA CSS PHẦN TERMINAL TẠI ĐÂY --- */
+        .terminal-output {
+            flex: 1;
+            background-color: #000000;
+            color: var(--term-color);
+            padding: 15px;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            
+            /* Tự động xuống dòng */
+            white-space: pre-wrap; 
+            word-wrap: break-word;
+            overflow-y: auto;
+            overflow-x: hidden;
+            
+            margin: 0;
+            line-height: 1.5;
+            border-left: 1px solid #333;
+        }
+
+        /* INFO BOX */
+        .info-box {
+            height: 280px;
+            background-color: var(--bg-panel);
+            border-top: 2px solid var(--accent-color);
+            padding: 20px;
+            overflow-y: auto;
+            border-radius: 4px;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+        }
+
+        .info-title {
+            color: var(--highlight);
+            margin-top: 0;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .info-item h4 { color: #569cd6; margin-bottom: 5px; margin-top: 0; }
+        .info-item ul { margin: 0; padding-left: 20px; color: #bbb; }
+        
+        .tag-badge {
+            background-color: #333;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-left: 10px;
+            color: #fff;
+            border: 1px solid #555;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-bar">
+        <button class="api-btn active" onclick="selectAPI('weather')">OpenWeatherMap</button>
+        <button class="api-btn" onclick="selectAPI('tmdb')">TMDB (Movie)</button>
+    </div>
+
+    <div class="dev-container">
+        <div class="editor-window">
+            <div class="window-header">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span>🐍 main.py</span>
+                </div>
+                <button class="run-btn" onclick="runSimulation()" title="Chạy code">▶ RUN</button>
+            </div>
+            <textarea class="code-input" id="python-code" spellcheck="false"></textarea>
+        </div>
+
+        <div class="editor-window">
+            <div class="window-header">
+                <div><span>TERMINAL</span></div>
+            </div>
+            <pre class="terminal-output" id="console-output">C:\Users\Dev\Projects> _</pre>
+        </div>
+    </div>
+
+    <div class="info-box" id="info-panel"></div>
+
+    <script>
+        // CẤU HÌNH DỮ LIỆU (Chỉ còn đường dẫn file, rất gọn)
+        const demoData = {
+            'weather': {
+                name: "OpenWeatherMap API",
+                filePath: "./codes/OpenWeatherMapAPI.py", // Đường dẫn tới file code
+                info: {
+                    def: "Là dịch vụ cung cấp dữ liệu thời tiết toàn cầu (hiện tại, dự báo, lịch sử). <span class='tag-badge'>Nhóm: Môi trường</span>",
+                    usage: `<ul>
+                                <li><strong>Nông nghiệp:</strong> Tự động tưới tiêu dựa trên dự báo mưa.</li>
+                                <li><strong>Logistics:</strong> Cảnh báo bão để điều chỉnh lộ trình vận chuyển.</li>
+                            </ul>`,
+                    req: "Cần đăng ký tài khoản để lấy <strong>API Key</strong>.",
+                    prosCons: `<ul>
+                                <li style="color:#4caf50"><strong>Ưu điểm:</strong> Dễ tiếp cận, gói Free hào phóng.</li>
+                                <li style="color:#ce9178"><strong>Nhược điểm:</strong> Gói Free có độ trễ cập nhật.</li>
+                            </ul>`
+                },
+                action: async (code) => {
+                    log(">>> Đang lấy dữ liệu thời tiết...");
+                    const cityMatch = code.match(/city = "(.*?)"/);
+                    const keyMatch = code.match(/api_key = "(.*?)"/);
+                    const city = cityMatch ? cityMatch[1] : "Ho Chi Minh City,VN";
+                    const key = keyMatch ? keyMatch[1] : "463ed506f10cd039c485cd8f2db2de19";
+                    try {
+                        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric&lang=vi`;
+                        const res = await fetch(url);
+                        if (res.status === 200) {
+                            const data = await res.json();
+                            log(`Thời tiết tại ${city}:`);
+                            log(`Nhiệt độ: ${data.main.temp}°C`);
+                            log(`Mô tả: ${data.weather[0].description}`);
+                        } else { log(`Lỗi: ${res.status}`); }
+                    } catch (e) { log("Lỗi kết nối mạng."); }
+                }
+            },
+
+            'tmdb': {
+                name: "The Movie Database (TMDB)",
+                filePath: "./codes/TheMovieDatabaseAPI.py", // File code
+                info: {
+                    def: "Cơ sở dữ liệu phim ảnh lớn nhất do cộng đồng đóng góp. <span class='tag-badge'>Nhóm: Giải trí</span>",
+                    usage: `<ul>
+                                <li><strong>Web xem phim:</strong> Lấy poster, nội dung, diễn viên.</li>
+                                <li><strong>Hệ thống gợi ý:</strong> Training dữ liệu sở thích người dùng.</li>
+                            </ul>`,
+                    req: "Cần <strong>API Key</strong> (Read Access Token).",
+                    prosCons: `<ul>
+                                <li style="color:#4caf50"><strong>Ưu điểm:</strong> Hỗ trợ Tiếng Việt tốt, ảnh đẹp.</li>
+                                <li style="color:#ce9178"><strong>Nhược điểm:</strong> Rate limit khắt khe.</li>
+                            </ul>`
+                },
+                action: async (code) => {
+                    log(">>> Đang tìm kiếm phim trên TMDB...");
+                    const queryMatch = code.match(/'query': '(.*?)'/);
+                    const keyMatch = code.match(/api_key = "(.*?)"/);
+                    const query = queryMatch ? queryMatch[1] : "Mưa đỏ";
+                    const key = keyMatch ? keyMatch[1] : "69ce4822562bacb250dea6a803cad4d6";
+                    try {
+                        const url = `https://api.themoviedb.org/3/search/movie?api_key=${key}&query=${query}&language=vi-VN`;
+                        const res = await fetch(url);
+                        if(res.status === 200) {
+                            const data = await res.json();
+                            if(data.results && data.results.length > 0) {
+                                const m = data.results[0];
+                                log(`Tên phim: ${m.title}`);
+                                log(`Ngày ra mắt: ${m.release_date}`);
+                                log(`Điểm: ${m.vote_average}/10`);
+                                log(`Nội dung: ${m.overview || "(Chưa có mô tả tiếng Việt)"}`);
+                            } else { log("Không tìm thấy phim."); }
+                        } else { log(`Lỗi API: ${res.status}`); }
+                    } catch (e) { log("Lỗi mạng."); }
+                }
+            },
+
+            'fda': {
+                name: "OpenFDA API (Healthcare)",
+                filePath: "codes/fda.py", // File code
+                info: {
+                    def: "Dữ liệu mở chính phủ Mỹ về thuốc & thiết bị y tế. <span class='tag-badge'>Nhóm: Y tế</span>",
+                    usage: `<ul>
+                                <li><strong>Tra cứu thuốc:</strong> Công dụng, liều lượng.</li>
+                                <li><strong>Cảnh báo:</strong> Tương tác thuốc, thu hồi sản phẩm.</li>
+                            </ul>`,
+                    req: "<strong>Không cần API Key</strong>.",
+                    prosCons: `<ul>
+                                <li style="color:#4caf50"><strong>Ưu điểm:</strong> Uy tín, miễn phí, không cần Key.</li>
+                                <li style="color:#ce9178"><strong>Nhược điểm:</strong> Thuật ngữ khó, JSON phức tạp.</li>
+                            </ul>`
+                },
+                action: async (code) => {
+                    const ingMatch = code.match(/active_ingredient = "(.*?)"/);
+                    const ing = ingMatch ? ingMatch[1] : "ibuprofen";
+                    log(`Đang tìm dữ liệu FDA cho: ${ing}...`);
+                    try {
+                        const url = `https://api.fda.gov/drug/label.json?search=active_ingredient:"${ing}"&limit=1`;
+                        const res = await fetch(url);
+                        if(res.status === 200) {
+                            const data = await res.json();
+                            if(data.results && data.results.length > 0) {
+                                const r = data.results[0];
+                                const brand = r.openfda.brand_name ? r.openfda.brand_name[0] : "N/A";
+                                const manuf = r.openfda.manufacturer_name ? r.openfda.manufacturer_name[0] : "N/A";
+                                log("--- KẾT QUẢ ---");
+                                log(`Tên thuốc: ${brand}`);
+                                log(`Nhà sản xuất: ${manuf}`);
+                            }
+                        } else { log("Không tìm thấy dữ liệu."); }
+                    } catch(e) { log("Lỗi mạng."); }
+                }
+            }
+        };
+
+        let currentKey = 'weather';
+
+        // HÀM CHỌN API (QUAN TRỌNG: CÓ FETCH FILE)
+        async function selectAPI(key) {
+            currentKey = key;
+            const data = demoData[key];
+
+            // 1. Update Buttons
+            document.querySelectorAll('.api-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // 2. Load Code từ File (Sử dụng fetch)
+            const codeEditor = document.getElementById('python-code');
+            codeEditor.value = "Đang tải code..."; // Hiển thị trạng thái chờ
+            
+            try {
+                const response = await fetch(data.filePath);
+                if (response.ok) {
+                    const text = await response.text();
+                    codeEditor.value = text; // Đổ code vào ô nhập
+                } else {
+                    codeEditor.value = `Lỗi: Không thể tải file ${data.filePath}. (Kiểm tra lại đường dẫn hoặc chạy trên Local Server)`;
+                }
+            } catch (error) {
+                codeEditor.value = `Lỗi CORS: Bạn cần chạy file HTML này trên Server (ví dụ: Live Server của VS Code) thì mới đọc được file ngoài.`;
+            }
+
+            // 3. Update Info Box
+            const infoHTML = `
+                <h2 class="info-title">${data.name}</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <h4>1. API là gì?</h4>
+                        <p>${data.info.def}</p>
+                        <h4>3. Cách gọi & Yêu cầu</h4>
+                        <p>${data.info.req}</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>2. Công dụng & Ứng dụng</h4>
+                        ${data.info.usage}
+                        <h4>4. Ưu điểm & Nhược điểm</h4>
+                        ${data.info.prosCons}
+                    </div>
+                </div>
+            `;
+            document.getElementById('info-panel').innerHTML = infoHTML;
+
+            // 4. Clear Terminal
+            document.getElementById('console-output').textContent = "C:\\Users\\Dev\\Projects> _";
+        }
+
+        function runSimulation() {
+            const term = document.getElementById('console-output');
+            const code = document.getElementById('python-code').value; // Lấy code hiện tại (sau khi fetch xong)
+            term.textContent = "C:\\Users\\Dev\\Projects> python main.py\n";
+            demoData[currentKey].action(code);
+        }
+
+        function log(text) {
+            const term = document.getElementById('console-output');
+            term.textContent += text + "\n";
+            term.scrollTop = term.scrollHeight;
+        }
+
+        // Init
+        window.onload = () => selectAPI('weather');
+
+    </script>
+</body>
+</html>
