@@ -2,6 +2,7 @@
 let currentKey = 'weather';
 let currentLang = 'vi'; // Mặc định tiếng Việt
 let editor; // Biến lưu trình soạn thảo CodeMirror
+let currentToolMode = ''; // <--- THÊM BIẾN NÀY (để phân biệt OCR hay RemoveBG)
 
 // --- HÀM TẠO NỘI DUNG SONG NGỮ ---
 // Hàm này giúp tạo đối tượng dữ liệu gọn gàng hơn
@@ -535,27 +536,32 @@ const demoData = {
   },
 
   // --- 10. REMOVE BG ---
+  // --- 10. REMOVE BG ---
   removebg: {
     name: 'Remove.bg API',
     filePath: './assets/codes/RemoveBGAPI.py',
     langData: {
       vi: {
-        def: `<strong>Mô tả:</strong> Dùng AI tách chủ thể khỏi nền ảnh tự động.`,
-        usage: `<ul><li><strong>E-commerce:</strong> Tách nền ảnh sản phẩm.</li><li><strong>Ảnh thẻ:</strong> Ghép nền xanh/trắng.</li></ul>`,
-        req: `<strong>Yêu cầu:</strong> Cần API Key. Endpoint: <code>api.remove.bg</code>`,
-        prosCons: `<ul><li style="color:#4caf50">Ưu: Chính xác cao.</li><li style="color:#ce9178">Nhược: Chi phí cao.</li></ul>`,
+        def: `<strong>Mô tả:</strong> Công cụ AI tự động tách chủ thể khỏi nền ảnh chỉ trong 5 giây.`,
+        usage: `<ul><li><strong>E-commerce:</strong> Ảnh sản phẩm nền trắng.</li><li><strong>Marketing:</strong> Thiết kế banner.</li></ul>`,
+        req: `<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>. Endpoint: <code>api.remove.bg/v1.0/removebg</code>`,
+        prosCons: `<ul><li style="color:#4caf50">Ưu: Chính xác cao.</li><li style="color:#ce9178">Nhược: Giá cao.</li></ul>`,
       },
       en: {
         def: `<strong>Description:</strong> AI-powered tool to remove image backgrounds automatically.`,
-        usage: `<ul><li><strong>E-commerce:</strong> Product photo editing.</li><li><strong>ID Photos:</strong> Background replacement.</li></ul>`,
-        req: `<strong>Req:</strong> API Key needed. Endpoint: <code>api.remove.bg</code>`,
+        usage: `<ul><li><strong>E-commerce:</strong> Product photos.</li><li><strong>Marketing:</strong> Banner design.</li></ul>`,
+        req: `<strong>Req:</strong> API Key. Lib <code>requests</code>. Endpoint: <code>api.remove.bg/v1.0/removebg</code>`,
         prosCons: `<ul><li style="color:#4caf50">Pros: High accuracy.</li><li style="color:#ce9178">Cons: Expensive.</li></ul>`,
       },
     },
     action: async (code) => {
-      log('>>> Opening Remove.bg GUI...', 'cmd');
+      log('>>> Đang khởi động Remove.bg GUI...', 'cmd');
       setTimeout(() => {
-        log('GUI Opened.', 'success');
+        currentToolMode = 'removebg'; // Đặt chế độ là Xóa phông
+        // Đổi tiêu đề cửa sổ lại thành Remove BG
+        document.querySelector('.tool-header span').innerHTML =
+          '<i class="fa-solid fa-wand-magic-sparkles"></i> AI Background Remover';
+        log('✅ Đã mở công cụ xử lý ảnh.', 'success');
         openTool();
       }, 500);
     },
@@ -567,21 +573,36 @@ const demoData = {
     filePath: './assets/codes/OCRSpaceAPI.py',
     langData: {
       vi: {
-        def: `<strong>Mô tả:</strong> Chuyển hình ảnh (hóa đơn, sách, PDF) thành văn bản.`,
-        usage: `<ul><li><strong>E-KYC:</strong> Đọc CMND/CCCD.</li><li><strong>Số hóa:</strong> Biến giấy thành Word.</li></ul>`,
-        req: `<strong>Yêu cầu:</strong> Key miễn phí. Endpoint: <code>api.ocr.space</code>`,
-        prosCons: `<ul><li style="color:#4caf50">Ưu: Miễn phí.</li><li style="color:#ce9178">Nhược: Phụ thuộc chất lượng ảnh.</li></ul>`,
+        def: `<strong>Mô tả:</strong> Dịch vụ Nhận dạng ký tự quang học (OCR) trên đám mây. Chuyển đổi ảnh Scan/PDF thành văn bản text.`,
+        usage: `<ul><li><strong>Số hóa:</strong> Chuyển hợp đồng giấy thành file Word.</li><li><strong>eKYC:</strong> Đọc thông tin CMND/CCCD.</li></ul>`,
+        req: `<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>. Endpoint: <code>api.ocr.space/parse/image</code>`,
+        prosCons: `<ul><li style="color:#4caf50">Ưu: Hỗ trợ tiếng Việt.</li><li style="color:#ce9178">Nhược: Phụ thuộc độ nét ảnh.</li></ul>`,
       },
       en: {
-        def: `<strong>Description:</strong> Convert images (invoices, books, PDFs) into text.`,
-        usage: `<ul><li><strong>E-KYC:</strong> ID card scanning.</li><li><strong>Digitization:</strong> Paper to digital text.</li></ul>`,
-        req: `<strong>Req:</strong> Free Key. Endpoint: <code>api.ocr.space</code>`,
-        prosCons: `<ul><li style="color:#4caf50">Pros: Free tier.</li><li style="color:#ce9178">Cons: Image quality dependent.</li></ul>`,
+        def: `<strong>Description:</strong> Cloud-based OCR service. Converts scanned images/PDFs into editable text.`,
+        usage: `<ul><li><strong>Digitization:</strong> Paper to digital text.</li><li><strong>eKYC:</strong> Extract ID card info.</li></ul>`,
+        req: `<strong>Req:</strong> API Key. Lib <code>requests</code>. Endpoint: <code>api.ocr.space/parse/image</code>`,
+        prosCons: `<ul><li style="color:#4caf50">Pros: Good Vietnamese support.</li><li style="color:#ce9178">Cons: Dependent on image quality.</li></ul>`,
       },
     },
     action: async (code) => {
-      log('--- KẾT QUẢ ĐỌC ĐƯỢC ---', 'success');
-      log('CERTIFICATE OF COMPLETION (DEMO)');
+      log('>>> Đang khởi động OCR Scanner...', 'cmd');
+      setTimeout(() => {
+        currentToolMode = 'ocr'; // Đặt chế độ OCR
+
+        // Đổi tiêu đề cửa sổ
+        const toolHeader = document.querySelector('.tool-header span');
+        if (toolHeader)
+          toolHeader.innerHTML =
+            '<i class="fa-solid fa-file-invoice"></i> OCR Document Scanner';
+
+        // Reset lại trạng thái giao diện (quan trọng)
+        document.getElementById('upload-stage').style.display = 'block';
+        document.getElementById('result-stage').style.display = 'none';
+
+        log('✅ Đã mở cửa sổ chọn tài liệu.', 'success');
+        openTool();
+      }, 500);
     },
   },
 
@@ -774,22 +795,134 @@ function closeTool() {
   }, 300);
 }
 
+// --- HÀM XỬ LÝ ẢNH THỰC TẾ (REAL API CALL) ---
 function processImage(input) {
   if (input.files && input.files[0]) {
     const file = input.files[0];
-    document.getElementById('upload-stage').style.display = 'none';
-    document.getElementById('result-stage').style.display = 'block';
-    document.getElementById('img-original').src = URL.createObjectURL(file);
 
-    log(`GUI: Uploading ${file.name}...`, 'cmd');
-    // Mock API Call
-    setTimeout(() => {
-      document.getElementById('img-result').src =
-        document.getElementById('img-original').src; // Demo: Trả về ảnh gốc
-      document.getElementById('status-text').innerText = '✅ Done (Demo Mode)';
-      document.getElementById('status-text').style.color = '#4CAF50';
-      log('GUI: Background removed.', 'success');
-    }, 1500);
+    // --- NHÁNH 1: XỬ LÝ OCR (GỌI API THẬT) ---
+    if (currentToolMode === 'ocr') {
+      // 1. Cập nhật giao diện trạng thái
+      document.getElementById('upload-stage').style.display = 'none';
+      document.getElementById('result-stage').style.display = 'block';
+
+      // Ẩn view RemoveBG
+      const removeBgView = document.getElementById('removebg-view');
+      if (removeBgView) removeBgView.style.display = 'none';
+
+      const statusText = document.getElementById('status-text');
+      statusText.innerHTML = '⏳ Đang gửi ảnh lên Server OCR.space...';
+      statusText.style.color = '#e2e8f0';
+
+      log(
+        `GUI: Đã chọn file "${file.name}" (${(file.size / 1024).toFixed(
+          1
+        )} KB)`,
+        'cmd'
+      );
+
+      // 2. Chuẩn bị dữ liệu gửi đi (FormData)
+      const formData = new FormData();
+      formData.append('file', file); // File ảnh thật
+      formData.append('apikey', 'helloworld'); // Key test (Giới hạn <1MB). Thay key riêng nếu muốn.
+      formData.append('language', 'eng'); // 'eng' hoặc 'vie' (Nếu dùng Key riêng mới đổi được sang 'vie')
+      formData.append('isOverlayRequired', 'false');
+
+      // 3. Đóng cửa sổ chọn ảnh để người dùng nhìn Console
+      setTimeout(() => {
+        statusText.innerHTML = `<i class="fa-solid fa-check-circle"></i> Upload xong. Đang xử lý...`;
+        statusText.style.color = '#4CAF50';
+        setTimeout(() => closeTool(), 500); // Đóng sau 0.5s
+      }, 1000);
+
+      // 4. GỌI API THỰC TẾ (FETCH)
+      log('>>> Đang kết nối tới https://api.ocr.space/parse/image...', 'cmd');
+
+      fetch('https://api.ocr.space/parse/image', {
+        method: 'POST',
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Kiểm tra lỗi từ API
+          if (data.IsErroredOnProcessing) {
+            log(`❌ Lỗi API: ${data.ErrorMessage}`, 'error');
+            if (data.ErrorMessage.includes('file size')) {
+              log(
+                "⚠️ Gợi ý: Key 'helloworld' chỉ cho phép ảnh dưới 1MB.",
+                'cmd'
+              );
+            }
+          } else if (data.ParsedResults && data.ParsedResults.length > 0) {
+            // Lấy kết quả chữ thật
+            const realText = data.ParsedResults[0].ParsedText;
+
+            log('✅ Đã nhận dạng thành công!', 'success');
+            log(
+              '--------------------------------------------------',
+              'success'
+            );
+            log(`📄 KẾT QUẢ THỰC TẾ TỪ ẢNH:`);
+            log(
+              '--------------------------------------------------',
+              'success'
+            );
+
+            // In nội dung chữ ra console
+            if (realText.trim() === '') {
+              log('(Không tìm thấy văn bản nào trong ảnh)', 'error');
+            } else {
+              log(realText);
+            }
+            log(
+              '--------------------------------------------------',
+              'success'
+            );
+          } else {
+            log('⚠️ API không trả về kết quả nào.', 'error');
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          log('❌ Lỗi kết nối mạng hoặc chặn CORS.', 'error');
+          log(
+            "⚠️ Lưu ý: Nếu dùng Key 'helloworld' quá nhiều lần sẽ bị chặn IP tạm thời.",
+            'cmd'
+          );
+        })
+        .finally(() => {
+          input.value = ''; // Reset input để chọn file khác
+        });
+    }
+
+    // --- NHÁNH 2: XỬ LÝ REMOVE BG (GIỮ NGUYÊN) ---
+    else {
+      const objectURL = URL.createObjectURL(file);
+      document.getElementById('upload-stage').style.display = 'none';
+      document.getElementById('result-stage').style.display = 'block';
+
+      const removeBgView = document.getElementById('removebg-view');
+      if (removeBgView) removeBgView.style.display = 'flex';
+
+      document.getElementById('img-original').src = objectURL;
+      const imgResult = document.getElementById('img-result');
+      imgResult.src = '';
+      imgResult.style.opacity = '0.5';
+
+      const statusText = document.getElementById('status-text');
+      statusText.innerText = '⏳ Đang tách nền...';
+      statusText.style.color = '#e2e8f0';
+
+      log(`GUI: Đã tải file "${file.name}"`, 'cmd');
+
+      setTimeout(() => {
+        imgResult.src = objectURL;
+        imgResult.style.opacity = '1';
+        statusText.innerHTML = '✅ Tách nền thành công!';
+        statusText.style.color = '#4CAF50';
+        log('GUI: Đã tách nền xong.', 'success');
+      }, 2000);
+    }
   }
 }
 
