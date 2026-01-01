@@ -223,43 +223,101 @@ const demoData = {
 
   // --- 4. NEWS API ---
   news: {
-    name: 'NewsAPI',
+    name: 'News API',
     filePath: './assets/codes/NewsAPI.py',
     langData: {
       vi: {
-        def: `<strong>Mô tả:</strong> Tổng hợp tin tức toàn cầu từ hàng nghìn nguồn (CNN, BBC...).`,
-        usage: `<ul><li><strong>App đọc báo:</strong> Gom tin tức về một chỗ.</li><li><strong>Phân tích:</strong> Quét từ khóa tài chính.</li></ul>`,
-        req: `<strong>Yêu cầu:</strong> Cần API Key. Endpoint: <code>newsapi.org/v2/top-headlines</code>`,
-        prosCons: `<ul><li style="color:#4caf50">Ưu: Cập nhật siêu tốc.</li><li style="color:#ce9178">Nhược: Bản Free bị cắt nội dung.</li></ul>`,
+        def: `<strong>Mô tả:</strong> Công cụ tổng hợp tin tức toàn cầu từ hàng nghìn nguồn uy tín (CNN, BBC, VNExpress...). Dữ liệu trả về gồm tiêu đề, mô tả, tác giả, ảnh thumbnail và link gốc.`,
+        usage: `<ul>
+                            <li><strong>App đọc báo:</strong> Gom tin từ nhiều nguồn vào một ứng dụng duy nhất.</li>
+                            <li><strong>Phân tích dữ liệu:</strong> Quét từ khóa tài chính/công nghệ để dự đoán xu hướng.</li>
+                            <li><strong>Cổng thông tin DN:</strong> Tự động hiển thị tin chuyên ngành lên website công ty.</li>
+                            <li><strong>AI Training:</strong> Dữ liệu huấn luyện các mô hình tóm tắt văn bản.</li>
+                        </ul>`,
+        req: `<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>.<br>
+                      <strong>Cách tạo Key:</strong><br>
+                      1. Truy cập <code>newsapi.org</code> và nhấn "Get API Key".<br>
+                      2. Điền thông tin (Chọn "I am an individual").<br>
+                      3. Copy Key hiện ra màn hình.<br>
+                      Endpoint: <code>newsapi.org/v2/top-headlines</code>`,
+        prosCons: `<ul>
+                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Cập nhật tức thời, bộ lọc mạnh mẽ (nguồn, quốc gia, thời gian), tài liệu dễ dùng.</li>
+                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Gói Free chỉ trả về tóm tắt (không full bài), cấm dùng cho thương mại.</li>
+                           </ul>`,
       },
       en: {
-        def: `<strong>Description:</strong> Breaking news headlines from 30,000+ news sources and blogs.`,
-        usage: `<ul><li><strong>Reader App:</strong> Aggregate news in one place.</li><li><strong>Analytics:</strong> Scan for financial keywords.</li></ul>`,
-        req: `<strong>Req:</strong> API Key needed. Endpoint: <code>newsapi.org/v2/top-headlines</code>`,
-        prosCons: `<ul><li style="color:#4caf50">Pros: Real-time updates.</li><li style="color:#ce9178">Cons: Free tier truncates content.</li></ul>`,
+        def: `<strong>Description:</strong> Global news aggregator from thousands of trusted sources (CNN, BBC...). Returns headlines, descriptions, authors, thumbnails, and original links.`,
+        usage: `<ul>
+                            <li><strong>News Aggregator:</strong> Centralize news from multiple sources into one app.</li>
+                            <li><strong>Data Analysis:</strong> Scan keywords for market trend prediction.</li>
+                            <li><strong>Corporate Portal:</strong> Auto-display industry-specific news.</li>
+                            <li><strong>AI Training:</strong> Data source for text summarization models.</li>
+                        </ul>`,
+        req: `<strong>Req:</strong> API Key. Lib <code>requests</code>.<br>
+                      <strong>Get Key:</strong><br>
+                      1. Go to <code>newsapi.org</code> > "Get API Key".<br>
+                      2. Fill info (Select "Individual").<br>
+                      3. Copy the Key.<br>
+                      Endpoint: <code>newsapi.org/v2/top-headlines</code>`,
+        prosCons: `<ul>
+                               <li style="color:#4caf50"><strong>Pros:</strong> Real-time updates, powerful filters (source, country, time), clear docs.</li>
+                               <li style="color:#ce9178"><strong>Cons:</strong> Free tier provides summary only (no full text), non-commercial use only.</li>
+                           </ul>`,
       },
     },
     action: async (code) => {
-      log('>>> Đang tải tin nóng...', 'cmd');
+      log('>>> Đang kết nối đến NewsAPI...', 'cmd');
+
       const keyMatch = code.match(/api_key = "(.*?)"/);
       const countryMatch = code.match(/country = "(.*?)"/);
-      const key = keyMatch ? keyMatch[1] : '';
+      const key = keyMatch ? keyMatch[1] : '42a7e5122a1d475fbe81576e3b088dbc';
       const country = countryMatch ? countryMatch[1] : 'us';
+
       try {
         const url = `https://newsapi.org/v2/top-headlines?country=${country}&apiKey=${key}`;
         const res = await fetch(url);
+
         if (res.status === 200) {
           const data = await res.json();
-          log(`--- TIN TỨC TẠI ${country.toUpperCase()} ---`);
-          data.articles.slice(0, 3).forEach((n, i) => {
-            log(`Bài ${i + 1}: ${n.title}`);
-            log(`Nguồn: ${n.source.name}`);
+          log(
+            `✅ Đã tìm thấy ${data.totalResults} bài viết. Hiển thị 5 bài mới nhất:`,
+            'success'
+          );
+
+          // SỬA Ở ĐÂY: Lấy 5 bài (slice 0->5)
+          data.articles.slice(0, 5).forEach((n, i) => {
+            log('--------------------------------------------------');
+            log(`📰 BÀI VIẾT #${i + 1}`);
+            log(`Tiêu đề: ${n.title}`, 'success');
+            log(`✍️ Tác giả: ${n.author || 'Không rõ'}`);
+            log(`🕒 Thời gian: ${new Date(n.publishedAt).toLocaleString()}`);
+            log(`🏢 Nguồn: ${n.source.name}`);
+
+            if (n.description) log(`📝 Tóm tắt: ${n.description}`);
+
+            if (n.urlToImage) {
+              log('🖼️ Ảnh Thumbnail:');
+              log(n.urlToImage, 'image');
+            }
+            log(`🔗 Link gốc: ${n.url}`);
           });
+          log('--------------------------------------------------');
         } else {
-          log(`Lỗi: ${res.status} (Cần Proxy)`, 'error');
+          throw new Error(`Status ${res.status}`);
         }
       } catch (e) {
-        log('Lỗi CORS.', 'error');
+        // FALLBACK Dữ liệu giả lập (Nếu lỗi CORS)
+        log('⚠️ Lỗi kết nối API (CORS). Hiển thị dữ liệu mẫu 5 bài:', 'cmd');
+        for (let i = 1; i <= 5; i++) {
+          log('--------------------------------------------------');
+          log(`📰 BÀI VIẾT #${i} (MÔ PHỎNG)`);
+          log(
+            `Tiêu đề: Tech News Headline Number ${i} - Breaking News`,
+            'success'
+          );
+          log(`🔗 Link: https://example.com/news-${i}`);
+        }
+        log('--------------------------------------------------');
       }
     },
   },
@@ -637,31 +695,85 @@ const demoData = {
     },
   },
 
-  // --- 12. GOOGLE TRANSLATE (MỚI) ---
+  // --- 12. GOOGLE TRANSLATE (UNOFFICIAL) ---
   translate: {
-    name: 'Google Translate API',
+    name: 'Googletrans (Unofficial)',
     filePath: './assets/codes/TranslateAPI.py',
     langData: {
       vi: {
-        def: `<strong>Mô tả:</strong> Dịch thuật máy thần kinh hỗ trợ hơn 100 ngôn ngữ.`,
-        usage: `<ul><li><strong>Du lịch:</strong> Dịch giọng nói.</li><li><strong>Web:</strong> Đa ngôn ngữ hóa.</li></ul>`,
-        req: `<strong>Yêu cầu:</strong> Google Cloud Key. Endpoint: <code>translation.googleapis.com</code>`,
-        prosCons: `<ul><li style="color:#4caf50">Ưu: Chính xác.</li><li style="color:#ce9178">Nhược: Tính phí.</li></ul>`,
+        def: `<strong>Mô tả:</strong> Thư viện Python mã nguồn mở, miễn phí, cho phép sử dụng Google Translate API không giới hạn. Hoạt động bằng cách gửi request trực tiếp đến giao diện web của Google Dịch.`,
+        usage: `<ul>
+                            <li><strong>Chatbot:</strong> Tự động dịch tin nhắn giữa người mua và người bán khác ngôn ngữ.</li>
+                            <li><strong>Bản địa hóa (Localization):</strong> Dịch file ngôn ngữ (JSON/XML) cho ứng dụng quốc tế.</li>
+                            <li><strong>Học tập:</strong> Tool học từ vựng, flashcard tự động lấy nghĩa/phát âm.</li>
+                            <li><strong>Phân tích dữ liệu:</strong> Dịch bình luận/đánh giá về ngôn ngữ gốc để phân tích cảm xúc (Sentiment Analysis).</li>
+                        </ul>`,
+        req: `<strong>Yêu cầu:</strong> Python & thư viện <code>googletrans</code>.<br>
+                      <strong>Cài đặt:</strong> <code>pip install googletrans==4.0.0-rc1</code><br>
+                      (Lưu ý: Phải dùng bản <strong>rc1</strong> vì bản cũ thường lỗi kết nối).<br>
+                      <strong>Cách dùng:</strong> Sử dụng class <code>Translator</code>.`,
+        prosCons: `<ul>
+                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Hoàn toàn miễn phí (không cần thẻ Visa/API Key), code đơn giản, tận dụng được data khổng lồ của Google.</li>
+                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Không ổn định (Unofficial - có thể bị chặn IP hoặc đổi cơ chế), dính lỗi 429 nếu spam request, không hợp cho Production lớn.</li>
+                           </ul>`,
       },
       en: {
-        def: `<strong>Description:</strong> Neural Machine Translation supporting 100+ languages.`,
-        usage: `<ul><li><strong>Travel:</strong> Voice translation.</li><li><strong>Web:</strong> Localization.</li></ul>`,
-        req: `<strong>Req:</strong> Google Cloud Key. Endpoint: <code>translation.googleapis.com</code>`,
-        prosCons: `<ul><li style="color:#4caf50">Pros: Accurate.</li><li style="color:#ce9178">Cons: Paid.</li></ul>`,
+        def: `<strong>Description:</strong> Free, open-source Python library that uses Google Translate API via web scraping requests. Supports auto-detection and translation for 100+ languages.`,
+        usage: `<ul>
+                            <li><strong>Chatbot:</strong> Auto-translate messages between buyers/sellers.</li>
+                            <li><strong>Localization:</strong> Translate app language files (JSON/XML) for global markets.</li>
+                            <li><strong>Learning:</strong> Vocabulary tools, auto-flashcards.</li>
+                            <li><strong>Data Analysis:</strong> Translate reviews for Sentiment Analysis algorithms.</li>
+                        </ul>`,
+        req: `<strong>Req:</strong> Python & lib <code>googletrans</code>.<br>
+                      <strong>Install:</strong> <code>pip install googletrans==4.0.0-rc1</code><br>
+                      (Note: Use <strong>rc1</strong> version to avoid connection errors).<br>
+                      <strong>Usage:</strong> Use <code>Translator</code> class.`,
+        prosCons: `<ul>
+                               <li style="color:#4caf50"><strong>Pros:</strong> Completely Free (no Credit Card/API Key), simple syntax, high accuracy from Google.</li>
+                               <li style="color:#ce9178"><strong>Cons:</strong> Unstable (Unofficial - risk of IP ban or breaking changes), Rate Limit (429) if abused, not for large Production.</li>
+                           </ul>`,
       },
     },
     action: async (code) => {
+      // 1. Phân tích code để lấy text cần dịch
       const textMatch = code.match(/text = "(.*?)"/);
-      const text = textMatch ? textMatch[1] : 'Hello';
-      log(`Translating: "${text}"...`);
-      setTimeout(() => {
-        log(`Output: "Xin chào" (Demo)`, 'success');
-      }, 800);
+      const srcMatch = code.match(/src = "(.*?)"/);
+      const destMatch = code.match(/dest = "(.*?)"/);
+
+      const text = textMatch ? textMatch[1] : 'Hôm nay trời đẹp';
+      const src = srcMatch ? srcMatch[1] : 'vi';
+      const dest = destMatch ? destMatch[1] : 'en';
+
+      // Giả lập Python Print: >>> Translating...
+      log(`>>> Translating: '${text}' (${src} -> ${dest})...`, 'cmd');
+
+      // 2. Gọi API Dịch miễn phí (MyMemory API) để demo kết quả thật
+      // (Vì ta không thể chạy thư viện Python googletrans trên trình duyệt, nên dùng API này để thay thế cho sinh động)
+      try {
+        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
+          text
+        )}&langpair=${src}|${dest}`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        // Giả lập độ trễ của mạng như code Python
+        setTimeout(() => {
+          if (data.responseData) {
+            log(`Original: ${text}`);
+            log(`Translated: ${data.responseData.translatedText}`);
+          } else {
+            log(`Original: ${text}`);
+            log(`Translated: Today is beautiful (Fallback)`);
+          }
+        }, 1000);
+      } catch (e) {
+        // Fallback nếu lỗi mạng
+        setTimeout(() => {
+          log(`Original: ${text}`);
+          log(`Translated: [Network Error] Could not fetch translation.`);
+        }, 1000);
+      }
     },
   },
 };
