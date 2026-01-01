@@ -536,32 +536,63 @@ const demoData = {
   },
 
   // --- 10. REMOVE BG ---
-  // --- 10. REMOVE BG ---
   removebg: {
     name: 'Remove.bg API',
     filePath: './assets/codes/RemoveBGAPI.py',
     langData: {
       vi: {
-        def: `<strong>Mô tả:</strong> Công cụ AI tự động tách chủ thể khỏi nền ảnh chỉ trong 5 giây.`,
-        usage: `<ul><li><strong>E-commerce:</strong> Ảnh sản phẩm nền trắng.</li><li><strong>Marketing:</strong> Thiết kế banner.</li></ul>`,
-        req: `<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>. Endpoint: <code>api.remove.bg/v1.0/removebg</code>`,
-        prosCons: `<ul><li style="color:#4caf50">Ưu: Chính xác cao.</li><li style="color:#ce9178">Nhược: Giá cao.</li></ul>`,
+        def: `<strong>Mô tả:</strong> Giải pháp xử lý hình ảnh dựa trên AI, chuyên dùng để tách nền tự động. Nhận diện chính xác chủ thể (người, sản phẩm, xe cộ) và loại bỏ phông nền chỉ trong vài giây, xử lý tốt cả tóc rối hay kính trong suốt.`,
+        usage: `<ul>
+                            <li><strong>Thương mại điện tử:</strong> Tự động xóa nền ảnh sản phẩm để ghép phông trắng chuẩn studio.</li>
+                            <li><strong>Ảnh thẻ & Hồ sơ:</strong> Thay đổi phông nền xanh/trắng cho ảnh chân dung/thẻ nhân viên.</li>
+                            <li><strong>Marketing:</strong> Tách layer nhanh chóng để làm banner, poster không cần cắt thủ công.</li>
+                            <li><strong>Cá nhân hóa:</strong> Tạo sticker, meme từ ảnh cá nhân.</li>
+                        </ul>`,
+        req: `<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>. File ảnh.<br>
+                      <strong>Cài đặt:</strong> <code>pip install requests</code><br>
+                      <strong>Cách tạo Key:</strong><br>
+                      1. Đăng ký tại <code>remove.bg</code> > Menu "Tools & API".<br>
+                      2. Chọn "API Key" > "Create New API Key".<br>
+                      Endpoint: <code>api.remove.bg/v1.0/removebg</code>`,
+        prosCons: `<ul>
+                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Chất lượng xuất sắc (top đầu thị trường), tốc độ xử lý nhanh (vài giây/ảnh).</li>
+                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Chi phí cao nếu dùng nhiều, gói Free chỉ cho tải ảnh nhỏ (Preview ~0.25MP).</li>
+                           </ul>`,
       },
       en: {
-        def: `<strong>Description:</strong> AI-powered tool to remove image backgrounds automatically.`,
-        usage: `<ul><li><strong>E-commerce:</strong> Product photos.</li><li><strong>Marketing:</strong> Banner design.</li></ul>`,
-        req: `<strong>Req:</strong> API Key. Lib <code>requests</code>. Endpoint: <code>api.remove.bg/v1.0/removebg</code>`,
-        prosCons: `<ul><li style="color:#4caf50">Pros: High accuracy.</li><li style="color:#ce9178">Cons: Expensive.</li></ul>`,
+        def: `<strong>Description:</strong> AI-based image processing solution for automatic background removal. Accurately detects subjects (people, products, cars) and handles complex details like hair or transparent glass.`,
+        usage: `<ul>
+                            <li><strong>E-commerce:</strong> Auto-remove backgrounds for product photos.</li>
+                            <li><strong>ID Photos:</strong> Change backgrounds for portraits/ID cards.</li>
+                            <li><strong>Marketing:</strong> Quick layer extraction for banners/posters.</li>
+                            <li><strong>Personal:</strong> Create stickers/memes.</li>
+                        </ul>`,
+        req: `<strong>Req:</strong> API Key. Lib <code>requests</code>. Image file.<br>
+                      <strong>Install:</strong> <code>pip install requests</code><br>
+                      <strong>Get Key:</strong> Sign up at <code>remove.bg</code> > "Tools & API" > Create Key.<br>
+                      Endpoint: <code>api.remove.bg/v1.0/removebg</code>`,
+        prosCons: `<ul>
+                               <li style="color:#4caf50"><strong>Pros:</strong> Excellent quality (market leader), fast processing.</li>
+                               <li style="color:#ce9178"><strong>Cons:</strong> Expensive for high volume, Free tier only allows small resolution (Preview).</li>
+                           </ul>`,
       },
     },
     action: async (code) => {
       log('>>> Đang khởi động Remove.bg GUI...', 'cmd');
       setTimeout(() => {
-        currentToolMode = 'removebg'; // Đặt chế độ là Xóa phông
-        // Đổi tiêu đề cửa sổ lại thành Remove BG
-        document.querySelector('.tool-header span').innerHTML =
-          '<i class="fa-solid fa-wand-magic-sparkles"></i> AI Background Remover';
-        log('✅ Đã mở công cụ xử lý ảnh.', 'success');
+        currentToolMode = 'removebg'; // Đặt chế độ RemoveBG
+
+        // Đổi tiêu đề cửa sổ
+        const toolHeader = document.querySelector('.tool-header span');
+        if (toolHeader)
+          toolHeader.innerHTML =
+            '<i class="fa-solid fa-wand-magic-sparkles"></i> AI Background Remover';
+
+        // Reset giao diện về mặc định
+        document.getElementById('upload-stage').style.display = 'block';
+        document.getElementById('result-stage').style.display = 'none';
+
+        log('✅ Đã mở công cụ tách nền.', 'success');
         openTool();
       }, 500);
     },
@@ -895,33 +926,105 @@ function processImage(input) {
         });
     }
 
-    // --- NHÁNH 2: XỬ LÝ REMOVE BG (GIỮ NGUYÊN) ---
+    // --- NHÁNH 2: XỬ LÝ REMOVE BG ---
     else {
       const objectURL = URL.createObjectURL(file);
       document.getElementById('upload-stage').style.display = 'none';
       document.getElementById('result-stage').style.display = 'block';
 
+      // Hiện lại giao diện RemoveBG
       const removeBgView = document.getElementById('removebg-view');
       if (removeBgView) removeBgView.style.display = 'flex';
 
+      // Hiển thị ảnh gốc
       document.getElementById('img-original').src = objectURL;
+
+      // Reset ảnh kết quả
       const imgResult = document.getElementById('img-result');
       imgResult.src = '';
       imgResult.style.opacity = '0.5';
+      imgResult.onclick = null; // Xóa sự kiện click cũ
+      imgResult.style.cursor = 'default';
+      imgResult.title = '';
 
       const statusText = document.getElementById('status-text');
-      statusText.innerText = '⏳ Đang tách nền...';
+      statusText.innerText = '⏳ Đang gửi ảnh lên Server Remove.bg...';
       statusText.style.color = '#e2e8f0';
 
       log(`GUI: Đã tải file "${file.name}"`, 'cmd');
 
-      setTimeout(() => {
-        imgResult.src = objectURL;
-        imgResult.style.opacity = '1';
-        statusText.innerHTML = '✅ Tách nền thành công!';
-        statusText.style.color = '#4CAF50';
-        log('GUI: Đã tách nền xong.', 'success');
-      }, 2000);
+      // --- CHUẨN BỊ GỌI API ---
+      // Key lấy từ file Python của bạn. Lưu ý: Key Free có giới hạn số lần gọi.
+      const apiKey = 'f8uU5eupXfvjoQoojq2RofN1';
+
+      const formData = new FormData();
+      formData.append('image_file', file);
+      formData.append('size', 'auto');
+
+      log('>>> Đang gọi API Remove.bg (POST)...', 'cmd');
+
+      fetch('https://api.remove.bg/v1.0/removebg', {
+        method: 'POST',
+        headers: {
+          'X-Api-Key': apiKey,
+        },
+        body: formData,
+      })
+        .then(async (response) => {
+          if (response.ok) {
+            return response.blob(); // API trả về file ảnh (Blob)
+          } else {
+            const errorText = await response.text();
+            throw new Error(`Lỗi API (${response.status}): ${errorText}`);
+          }
+        })
+        .then((blob) => {
+          // Xử lý thành công
+          const resultUrl = URL.createObjectURL(blob);
+
+          imgResult.src = resultUrl;
+          imgResult.style.opacity = '1';
+
+          statusText.innerHTML =
+            '✅ Tách nền thành công! (Click vào ảnh để tải)';
+          statusText.style.color = '#4CAF50';
+
+          log('✅ Đã nhận được ảnh kết quả.', 'success');
+
+          // --- TÍNH NĂNG TẢI ẢNH KHI CLICK ---
+          imgResult.style.cursor = 'pointer';
+          imgResult.title = 'Click để tải ảnh về máy';
+          imgResult.onclick = () => {
+            const a = document.createElement('a');
+            a.href = resultUrl;
+            a.download = 'removebg_result.png'; // Tên file khi tải về
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            log('⬇️ Đang tải ảnh về máy...', 'cmd');
+          };
+        })
+        .catch((error) => {
+          console.error(error);
+          statusText.innerText = '❌ Lỗi: ' + error.message;
+          statusText.style.color = '#ff5f56';
+          log('❌ ' + error.message, 'error');
+
+          // Cảnh báo về CORS (Vấn đề thường gặp khi gọi RemoveBG từ trình duyệt)
+          if (error.message.includes('Failed to fetch')) {
+            log(
+              '⚠️ LƯU Ý: Remove.bg chặn gọi trực tiếp từ trình duyệt (CORS).',
+              'cmd'
+            );
+            log(
+              "Để chạy được demo này, bạn cần cài Extension 'Allow CORS' hoặc chạy qua Proxy server.",
+              'cmd'
+            );
+          }
+        })
+        .finally(() => {
+          input.value = ''; // Reset để chọn ảnh khác
+        });
     }
   }
 }
