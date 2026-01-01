@@ -1,26 +1,34 @@
+import asyncio
 from googletrans import Translator
 
-def translate_text():
-    # Khởi tạo thư viện
+async def translate_text():
     translator = Translator()
-    
-    # Dữ liệu đầu vào
-    text = "Hôm nay trời đẹp"
-    src = "vi"   # Ngôn ngữ nguồn (Vietnamese)
-    dest = "en"  # Ngôn ngữ đích (English)
-    
-    print(f">>> Translating: '{text}' ({src} -> {dest})...")
-    
-    # Gọi API   
+
+    text = "Hôm nay trời đẹp quá"
+    # Không chỉ định src để API tự phát hiện
+    dest = "en"
+
+    print(f">>> Đang dịch: '{text}' (Auto -> {dest})...")
+
     try:
-        translation = translator.translate(text, src=src, dest=dest)
+        # Dịch
+        translation = await translator.translate(text, dest=dest)
+
+        print("-" * 50)
+        print(f"KẾT QUẢ:")
+        print(f"Gốc:          {translation.origin}")
+        print(f"Dịch sang:    {translation.text}")
+        print("-" * 50)
         
-        # Hiển thị kết quả
-        print(f"Original: {translation.origin}")
-        print(f"Translated: {translation.text}")
-        
+        # Thông tin phát hiện ngôn ngữ
+        print(f"Phát hiện ngôn ngữ gốc: {translation.src}")
+        # (Lưu ý: Googletrans bản free đôi khi không trả về confidence, nhưng ta cứ in cấu trúc ra)
+        if hasattr(translation, 'extra_data'):
+             print(f"ℹDữ liệu bổ sung: {translation.extra_data.get('confidence', 'N/A')}")
+        print("-" * 50)
+
     except Exception as e:
         print("Lỗi kết nối API:", e)
 
 if __name__ == "__main__":
-    translate_text()
+    asyncio.run(translate_text())

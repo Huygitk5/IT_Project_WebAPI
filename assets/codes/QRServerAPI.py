@@ -1,36 +1,28 @@
 import requests
+import os
 
-# 1. Cấu hình nội dung
-# Bạn hãy thay dòng dưới bằng Link Facebook hoặc Portfolio của bạn
 my_data = "https://www.facebook.com/profile.php?id=100000000" 
-
-# Kích thước ảnh QR (300x300 pixel)
 image_size = "300x300"
-
-# 2. Xây dựng URL API
-# Cấu trúc: https://api.qrserver.com/v1/create-qr-code/?size=...&data=...
 url = "https://api.qrserver.com/v1/create-qr-code/"
-params = {
-    "size": image_size,
-    "data": my_data
-}
+params = {"size": image_size, "data": my_data}
 
-print(f"Đang tạo mã QR cho: {my_data}")
-
-# 3. Gọi API (GET)
+print(f">>> Đang tạo mã QR cho: {my_data}")
 response = requests.get(url, params=params)
 
-# 4. Lưu ảnh về máy
 if response.status_code == 200:
     output_file = "my_qrcode.png"
-    
     with open(output_file, "wb") as f:
         f.write(response.content)
+    
+    # Lấy kích thước file
+    file_size = os.path.getsize(output_file) / 1024 # KB
         
-    print("------------------------------------------------")
-    print("✅ THÀNH CÔNG!")
-    print(f"Đã tạo file '{output_file}' trong thư mục dự án.")
-    print("👉 HÃY MỞ FILE ẢNH ĐÓ LÊN VÀ DÙNG ĐIỆN THOẠI QUÉT THỬ!")
-    print("------------------------------------------------")
+    print("-" * 50)
+    print("TẠO THÀNH CÔNG!")
+    print(f"File:      {output_file}")
+    print(f"Dung lượng:{file_size:.2f} KB")
+    print(f"Kích thước:{image_size}")
+    print(f"Loại ảnh:  {response.headers['Content-Type']}")
+    print("-" * 50)
 else:
     print("Lỗi:", response.status_code)

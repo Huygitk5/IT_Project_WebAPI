@@ -547,3 +547,38 @@ body.light-mode .CodeMirror-gutters {
   background: rgba(255, 255, 255, 0.5) !important;
   border-right: 1px solid rgba(0, 0, 0, 0.05) !important;
 }
+
+/* --- CSS MỚI CHO HEADER CỦA INFO BOX --- */
+.info-header-container {
+  display: flex;
+  justify-content: space-between; /* Đẩy tiêu đề sang trái, nút sang phải */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #444; /* Đường gạch ngăn cách nhẹ (tùy chọn) */
+}
+
+.info-title {
+  margin: 0 !important; /* Xóa margin mặc định để căn hàng đẹp hơn */
+}
+
+/* Style cho nút dịch mới */
+.translate-btn {
+  background-color: var(--primary, #00d8ff); /* Dùng màu chủ đạo */
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.translate-btn:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
