@@ -1,40 +1,174 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Showcase - IT Project</title>
-    <link rel="stylesheet" href="./assets/styles.css" type="text/css"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ultimate API Dashboard</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
 
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css"
+    />
 
-    <div class="nav-bar">
-        <button class="api-btn active" onclick="selectAPI('weather')">OpenWeatherMap</button>
-        <button class="api-btn" onclick="selectAPI('tmdb')">TMDB (Movie)</button>
-    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
 
-    <div class="dev-container">
-        <div class="editor-window">
-            <div class="window-header">
-                <div style="display:flex; align-items:center; gap:8px;">
-                    <span>🐍 main.py</span>
-                </div>
-                <button class="run-btn" onclick="runSimulation()" title="Chạy code">▶ RUN</button>
-            </div>
-            <textarea class="code-input" id="python-code" spellcheck="false"></textarea>
+    <link rel="stylesheet" href="assets/styles.css" type="text/css" />
+  </head>
+  <body>
+    <div class="bg-animation"></div>
+
+    <div class="main-layout">
+      <nav class="sidebar">
+        <div class="brand"><i class="fa-solid fa-code-branch"></i> API HUB</div>
+        <div class="menu-list">
+          <div class="menu-category">TOOLS</div>
+          <button class="api-btn active" onclick="selectAPI('weather')">
+            <i class="fa-solid fa-cloud"></i> Weather
+          </button>
+          <button class="api-btn" onclick="selectAPI('qr')">
+            <i class="fa-solid fa-qrcode"></i> QR Code
+          </button>
+          <button class="api-btn" onclick="selectAPI('ocr')">
+            <i class="fa-solid fa-eye"></i> OCR Scan
+          </button>
+          <button class="api-btn" onclick="selectAPI('removebg')">
+            <i class="fa-solid fa-eraser"></i> Remove BG
+          </button>
+          <button class="api-btn" onclick="selectAPI('translate')">
+            <i class="fa-solid fa-language"></i> Google Translate
+          </button>
+          <div class="menu-category">DATA</div>
+          <button class="api-btn" onclick="selectAPI('tmdb')">
+            <i class="fa-solid fa-film"></i> TMDB Movie
+          </button>
+          <button class="api-btn" onclick="selectAPI('news')">
+            <i class="fa-solid fa-newspaper"></i> News API
+          </button>
+          <button class="api-btn" onclick="selectAPI('country')">
+            <i class="fa-solid fa-globe"></i> Countries
+          </button>
+          <button class="api-btn" onclick="selectAPI('exchange')">
+            <i class="fa-solid fa-money-bill-transfer"></i> Exchange
+          </button>
+
+          <div class="menu-category">ADVANCED</div>
+          <button class="api-btn" onclick="selectAPI('unsplash')">
+            <i class="fa-solid fa-image"></i> Unsplash
+          </button>
+          <button class="api-btn" onclick="selectAPI('urlscan')">
+            <i class="fa-solid fa-shield-halved"></i> URL Scan
+          </button>
+          <button class="api-btn" onclick="selectAPI('openai')">
+            <i class="fa-solid fa-robot"></i> OpenAI
+          </button>
         </div>
 
-        <div class="editor-window">
-            <div class="window-header">
-                <div><span>TERMINAL</span></div>
-            </div>
-            <pre class="terminal-output" id="console-output">C:\Users\Dev\Projects> _</pre>
+        <div class="sidebar-footer">
+          <button class="theme-btn" onclick="toggleTheme()">
+            <i class="fa-solid fa-moon" id="theme-icon"></i>
+            <span id="theme-text">Dark Mode</span>
+          </button>
         </div>
+      </nav>
+
+      <main class="content-area">
+        <div class="dev-container">
+          <div class="editor-window glass-panel">
+            <div class="window-header">
+              <div class="tab active">
+                <i class="fa-brands fa-python"></i> demo_script.py
+              </div>
+              <button class="run-btn" onclick="runSimulation()">
+                <i class="fa-solid fa-play"></i> RUN
+              </button>
+            </div>
+            <div class="editor-body">
+              <textarea id="python-code" name="python-code"></textarea>
+            </div>
+          </div>
+
+          <div class="editor-window glass-panel terminal-window">
+            <div class="window-header">
+              <div class="tab">
+                <i class="fa-solid fa-terminal"></i> Terminal
+              </div>
+              <div class="status-dot"></div>
+            </div>
+            <div class="terminal-output" id="console-output">
+              C:\Users\Dev\Projects> _
+            </div>
+          </div>
+        </div>
+
+        <div class="info-box glass-panel" id="info-panel"></div>
+      </main>
     </div>
 
-    <div class="info-box" id="info-panel"></div>
+    <div id="tool-overlay" class="overlay-container">
+      <div class="tool-window glass-panel">
+        <div class="tool-header">
+          <span
+            ><i class="fa-solid fa-wand-magic-sparkles"></i> AI Background
+            Remover</span
+          >
+          <button class="close-tool-btn" onclick="closeTool()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
 
+        <div class="tool-body">
+          <div id="upload-stage">
+            <div
+              class="upload-zone"
+              onclick="document.getElementById('file-upload').click()"
+            >
+              <div class="icon-pulse">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <h3>Drop image here or Click to Upload</h3>
+              <p>Support JPG, PNG</p>
+            </div>
+            <input
+              type="file"
+              id="file-upload"
+              hidden
+              accept="image/*"
+              onchange="processImage(this)"
+            />
+          </div>
+
+          <div id="result-stage" style="display: none">
+            <div class="status-bar" id="status-text">⏳ Processing...</div>
+            <div class="comparison-view">
+              <div class="img-box">
+                <span>Original</span>
+                <img id="img-original" src="" alt="Original" />
+              </div>
+              <div class="img-box">
+                <span>Result ✨</span>
+                <img id="img-result" src="" alt="Result" />
+              </div>
+            </div>
+            <button class="reset-btn" onclick="resetTool()">
+              <i class="fa-solid fa-rotate-right"></i> Try Another
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="./main.js"></script>
-</body>
+  </body>
 </html>

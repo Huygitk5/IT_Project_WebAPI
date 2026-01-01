@@ -1,167 +1,549 @@
+/* =========================================
+   1. VARIABLES & GLOBAL
+   ========================================= */
 :root {
-    --bg-dark: #1e1e1e;
-    --bg-panel: #252526;
-    --text-color: #cccccc;
-    --accent-color: #3776ab;
-    --border-color: #3e3e42;
-    --term-color: #d4d4d4;
-    --highlight: #4ec9b0;
+  --bg-dark: #0f172a; /* Xanh đen thẫm vũ trụ */
+  --glass-bg: rgba(30, 41, 59, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --primary: #38bdf8; /* Cyan Neon */
+  --accent: #f472b6; /* Pink Neon */
+  --success: #4ade80;
+  --text-main: #e2e8f0;
+  --text-muted: #94a3b8;
+  --font-ui: 'Outfit', sans-serif;
+  --font-code: 'JetBrains Mono', monospace;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #121212;
-    color: var(--text-color);
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  font-family: var(--font-ui);
+  color: var(--text-main);
+  background-color: var(--bg-dark);
+  overflow: hidden;
+  transition: background-color 0.5s ease;
 }
 
-/* NAVIGATION */
-.nav-bar {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 10px;
+/* Background động (Aurora Effect) */
+.bg-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: radial-gradient(
+      circle at 10% 10%,
+      rgba(56, 189, 248, 0.15),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 90% 80%,
+      rgba(244, 114, 182, 0.1),
+      transparent 40%
+    );
+  animation: pulseBg 10s infinite alternate;
+}
+
+@keyframes pulseBg {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* =========================================
+   2. MAIN LAYOUT (SIDEBAR + CONTENT)
+   ========================================= */
+.main-layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 260px;
+  background: rgba(15, 23, 42, 0.95);
+  border-right: 1px solid var(--glass-border);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s;
+}
+
+.brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.menu-list {
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 5px;
+}
+
+.menu-category {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 15px 0 5px 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
 .api-btn {
-    background-color: var(--bg-panel);
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-    padding: 8px 20px;
-    cursor: pointer;
-    font-size: 13px;
-    transition: 0.2s;
-    border-radius: 3px;
-    font-weight: 500;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  width: 100%;
+  text-align: left;
+  padding: 12px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.api-btn:hover, .api-btn.active {
-    background-color: #007acc;
-    color: white;
-    border-color: #007acc;
+.api-btn i {
+  width: 20px;
+  text-align: center;
+  transition: 0.3s;
 }
 
-/* DEV CONTAINER */
+.api-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  padding-left: 20px; /* Hiệu ứng trượt nhẹ */
+}
+
+.api-btn.active {
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.15), transparent);
+  color: var(--primary);
+  border-left: 3px solid var(--primary);
+  font-weight: 600;
+  padding-left: 20px;
+}
+
+.api-btn.active i {
+  color: var(--primary);
+  text-shadow: 0 0 10px var(--primary);
+}
+
+/* MAIN CONTENT */
+.content-area {
+  flex: 1;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow: hidden;
+}
+
+/* =========================================
+   3. GLASS PANELS (EDITOR, TERMINAL, INFO)
+   ========================================= */
+.glass-panel {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
 .dev-container {
-    display: flex;
-    flex: 1;
-    gap: 15px;
-    min-height: 400px;
-    margin-bottom: 15px;
+  display: flex;
+  flex: 2;
+  gap: 20px;
+  min-height: 0;
 }
 
 .editor-window {
-    flex: 1;
-    background-color: var(--bg-dark);
-    border: 1px solid var(--border-color);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border-radius: 4px;
+  flex: 6;
+  display: flex;
+  flex-direction: column;
+}
+.terminal-window {
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .window-header {
-    background-color: var(--bg-panel);
-    padding: 0 10px;
-    height: 35px;
-    font-size: 13px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border-color);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0 15px;
+  height: 45px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.tab {
+  padding: 8px 15px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  border-bottom: 2px solid transparent;
+}
+
+.tab.active {
+  color: white;
+  border-bottom-color: var(--accent);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .run-btn {
-    background-color: transparent;
-    color: #4caf50;
-    border: none;
-    padding: 4px 10px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  background: var(--success);
+  color: #000;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(74, 222, 128, 0.4);
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
-.run-btn:hover { background-color: #3e3e42; border-radius: 3px; }
-
-textarea.code-input {
-    flex: 1;
-    background-color: var(--bg-dark);
-    color: #9cdcfe;
-    border: none;
-    padding: 15px;
-    font-family: 'Consolas', monospace;
-    font-size: 14px;
-    line-height: 1.5;
-    resize: none;
-    outline: none;
-    white-space: pre;
+.run-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(74, 222, 128, 0.6);
 }
-textarea.code-input:focus { background-color: #1a1a1a; }
 
-/* --- SỬA CSS PHẦN TERMINAL TẠI ĐÂY --- */
+/* EDITOR BODY & CODE INPUT */
+.editor-body {
+  flex: 1;
+  display: flex;
+  position: relative;
+  /* Loại bỏ padding cũ vì CodeMirror sẽ tự căn chỉnh */
+  overflow: hidden;
+}
+
+/* Đã xóa .line-numbers và .code-input cũ vì CodeMirror thay thế hoàn toàn */
+
 .terminal-output {
-    flex: 1;
-    background-color: #000000;
-    color: var(--term-color);
-    padding: 15px;
-    font-family: 'Consolas', monospace;
-    font-size: 13px;
-    
-    /* Tự động xuống dòng */
-    white-space: pre-wrap; 
-    word-wrap: break-word;
-    overflow-y: auto;
-    overflow-x: hidden;
-    
-    margin: 0;
-    line-height: 1.5;
-    border-left: 1px solid #333;
+  flex: 1;
+  padding: 20px;
+  font-family: var(--font-code);
+  font-size: 0.85rem;
+  color: #d1d5db;
+  overflow-y: auto;
+  white-space: pre-wrap;
 }
 
-/* INFO BOX */
 .info-box {
-    height: 280px;
-    background-color: var(--bg-panel);
-    border-top: 2px solid var(--accent-color);
-    padding: 20px;
-    overflow-y: auto;
-    border-radius: 4px;
-    box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+  flex: 1;
+  padding: 25px;
+  overflow-y: auto;
 }
-
 .info-title {
-    color: var(--highlight);
-    margin-top: 0;
-    border-bottom: 1px solid #444;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
+  color: var(--primary);
+  font-size: 1.5rem;
+  margin-top: 0;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
 }
-
 .info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    font-size: 14px;
-    line-height: 1.6;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+.info-item h4 {
+  color: white;
+  margin-bottom: 10px;
+  border-left: 3px solid var(--accent);
+  padding-left: 10px;
+}
+.info-item p,
+.info-item ul {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+code {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--accent);
+  font-family: var(--font-code);
 }
 
-.info-item h4 { color: #569cd6; margin-bottom: 5px; margin-top: 0; }
-.info-item ul { margin: 0; padding-left: 20px; color: #bbb; }
+/* =========================================
+   4. TOOL OVERLAY (MODERN MODAL)
+   ========================================= */
+.overlay-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.overlay-container.active {
+  opacity: 1;
+}
 
-.tag-badge {
-    background-color: #333;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.85em;
-    margin-left: 10px;
-    color: #fff;
-    border: 1px solid #555;
+.tool-window {
+  width: 900px;
+  background: linear-gradient(
+    145deg,
+    rgba(30, 41, 59, 0.9),
+    rgba(15, 23, 42, 0.95)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: scale(0.9);
+  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.overlay-container.active .tool-window {
+  transform: scale(1);
+}
+
+.tool-header {
+  padding: 20px 30px;
+  border-bottom: 1px solid var(--glass-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+}
+
+.close-tool-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  color: var(--text-muted);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.close-tool-btn:hover {
+  background: #ef4444;
+  color: white;
+  transform: rotate(90deg);
+}
+
+.tool-body {
+  padding: 40px;
+  text-align: center;
+}
+
+.upload-zone {
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 60px;
+  cursor: pointer;
+  transition: 0.3s;
+  background: rgba(255, 255, 255, 0.02);
+}
+.upload-zone:hover {
+  border-color: var(--primary);
+  background: rgba(56, 189, 248, 0.05);
+}
+
+.icon-pulse {
+  font-size: 3rem;
+  color: var(--primary);
+  margin-bottom: 15px;
+  animation: bounce 2s infinite;
+}
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.comparison-view {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
+}
+.img-box {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+}
+.img-box img {
+  max-width: 100%;
+  height: 250px;
+  object-fit: contain;
+  border-radius: 8px;
+  background-image: radial-gradient(#475569 1px, transparent 1px);
+  background-size: 10px 10px;
+}
+
+.reset-btn {
+  margin-top: 30px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border: none;
+  padding: 12px 30px;
+  color: white;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+}
+.reset-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(56, 189, 248, 0.4);
+}
+
+/* =========================================
+   5. LIGHT MODE OVERRIDES
+   ========================================= */
+body.light-mode {
+  --bg-dark: #f1f5f9;
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(0, 0, 0, 0.06);
+  --text-main: #334155;
+  --text-muted: #64748b;
+  --primary: #0284c7;
+  --accent: #d946ef;
+}
+
+body.light-mode .bg-animation {
+  background: radial-gradient(
+      circle at 10% 10%,
+      rgba(14, 165, 233, 0.1),
+      transparent 40%
+    ),
+    radial-gradient(circle at 90% 80%, rgba(217, 70, 239, 0.1), transparent 40%);
+  opacity: 0.6;
+}
+
+body.light-mode .sidebar {
+  background: rgba(255, 255, 255, 0.8);
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .brand {
+  background: linear-gradient(to right, #0284c7, #c026d3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body.light-mode .api-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #0f172a;
+}
+body.light-mode .api-btn.active {
+  background: linear-gradient(90deg, rgba(2, 132, 199, 0.1), transparent);
+  color: var(--primary);
+}
+
+/* Sidebar Footer Button */
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--glass-border);
+}
+
+.theme-btn {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-main);
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: 0.3s;
+}
+
+.theme-btn:hover {
+  background: var(--glass-border);
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   6. CODEMIRROR CUSTOMIZATION
+   ========================================= */
+.CodeMirror {
+  height: 100% !important;
+  width: 100%;
+  background: transparent !important; /* Để nền trong suốt ăn theo glass-panel */
+  font-family: var(--font-code) !important;
+  color: #e2e8f0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Chỉnh màu thanh số dòng (Gutter) cho hợp theme */
+.CodeMirror-gutters {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border-right: 1px solid var(--glass-border) !important;
+}
+
+/* Màu số dòng */
+.CodeMirror-linenumber {
+  color: #64748b !important;
+}
+
+/* Light mode override cho CodeMirror */
+body.light-mode .CodeMirror {
+  color: #334155;
+}
+body.light-mode .CodeMirror-gutters {
+  background: rgba(255, 255, 255, 0.5) !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.05) !important;
 }

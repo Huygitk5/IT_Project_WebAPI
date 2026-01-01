@@ -2,7 +2,7 @@ import requests
 # 1. Cấu hình
 api_key = "69ce4822562bacb250dea6a803cad4d6" # Thay key của bạn vào đây
 base_url = "https://api.themoviedb.org/3/search/movie"
-# 2. Xây dựng tham số: Tìm phim tên là "Batman"
+# 2. Xây dựng tham số: Tìm phim tên là "Mưa đỏ"
 params = {
     'api_key': api_key,
     'query': 'Mưa đỏ',
