@@ -907,7 +907,7 @@ const demoData = {
     },
   },
 
-  // --- 8. URL SCAN ---
+  // --- 8. URL SCAN (CÓ TÍNH NĂNG ZOOM ẢNH) ---
   urlscan: {
     name: 'URLScan.io API',
     filePath: './assets/codes/URLScan.py',
@@ -950,18 +950,17 @@ const demoData = {
     action: async (code) => {
       log('>>> Đang gửi yêu cầu quét tới URLScan.io...', 'cmd');
 
-      // Lấy thông tin từ code
       const keyMatch = code.match(/api_key = "(.*?)"/);
       const targetMatch = code.match(/target_url = "(.*?)"/);
 
-      // KEY MỚI CỦA BẠN
+      // Key và Target mặc định
       const key = keyMatch
         ? keyMatch[1]
         : '019b22ef-6974-7101-a540-727488790753';
       const target = targetMatch ? targetMatch[1] : 'https://google.com';
 
       try {
-        // BƯỚC 1: GỬI YÊU CẦU QUÉT (POST)
+        // BƯỚC 1: GỬI POST
         const res = await fetch('https://urlscan.io/api/v1/scan/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'API-Key': key },
@@ -974,9 +973,9 @@ const demoData = {
 
           log(`✅ Gửi yêu cầu thành công!`, 'success');
           log(`UUID: ${uuid}`);
-          log(`⏳ Đang đợi server phân tích (15s)...`);
+          log(`⏳ Đang đợi server phân tích (khoảng 15s)...`);
 
-          // BƯỚC 2: ĐẾM NGƯỢC (Giả lập thời gian chờ server như code Python)
+          // BƯỚC 2: ĐẾM NGƯỢC
           let timeLeft = 15;
           const countdownLine = document.createElement('div');
           document.getElementById('console-output').appendChild(countdownLine);
@@ -990,7 +989,7 @@ const demoData = {
               clearInterval(timer);
               countdownLine.innerText = '>>> Đang tải báo cáo chi tiết...';
 
-              // BƯỚC 3: LẤY KẾT QUẢ CHI TIẾT (GET)
+              // BƯỚC 3: LẤY KẾT QUẢ
               try {
                 const resultRes = await fetch(
                   `https://urlscan.io/api/v1/result/${uuid}/`
@@ -1009,36 +1008,88 @@ const demoData = {
                   log(`IP:       ${page.ip} (${page.country})`);
                   log(`Server:   ${page.server || 'N/A'}`);
 
-                  // --- PHẦN MỚI: ĐÁNH GIÁ AN TOÀN ---
+                  // Đánh giá an toàn
                   const overall = verdicts.overall || {};
                   const isMalicious = overall.malicious;
                   const score = overall.score || 0;
-
-                  // Logic hiển thị giống Python: {'CÓ ⚠️' if malicious else 'KHÔNG ✅'}
                   const statusText = isMalicious ? 'CÓ ⚠️' : 'KHÔNG ✅';
                   log(
                     `🛡️ Độc hại:  ${statusText} (Điểm rủi ro: ${score})`,
                     isMalicious ? 'error' : 'success'
                   );
 
-                  // --- PHẦN MỚI: THỐNG KÊ TÀI NGUYÊN ---
+                  // Thống kê tài nguyên
                   const resStats = stats.resourceStats || {};
-                  const count = resStats.count || 0;
-                  // Chuyển đổi byte sang KB giống Python (/ 1024)
                   const sizeKB = ((resStats.size || 0) / 1024).toFixed(2);
-
-                  log(`📦 Tài nguyên: ${count} requests`);
+                  log(`📦 Tài nguyên: ${resStats.count || 0} requests`);
                   log(`🌐 Tổng dung lượng: ${sizeKB} KB`);
 
-                  // Hiển thị Screenshot
+                  // --- TÍNH NĂNG ZOOM ẢNH SCREENSHOT ---
                   if (task.screenshotURL) {
-                    log('📸 Screenshot:');
-                    log(task.screenshotURL, 'image');
+                    log('📸 Screenshot (Click để phóng to):');
+
+                    const term = document.getElementById('console-output');
+                    const imgContainer = document.createElement('div');
+                    imgContainer.style.margin = '10px 0';
+
+                    // Tạo ảnh thu nhỏ trong console
+                    const img = document.createElement('img');
+                    img.src = task.screenshotURL;
+                    img.style.maxWidth = '250px';
+                    img.style.border = '1px solid #555';
+                    img.style.borderRadius = '5px';
+                    img.style.cursor = 'zoom-in';
+                    img.title = 'Click để xem toàn màn hình';
+
+                    // Sự kiện Click -> Tạo Overlay Fullscreen
+                    img.onclick = function () {
+                      const overlay = document.createElement('div');
+                      // Style cho lớp phủ nền đen mờ
+                      overlay.style.position = 'fixed';
+                      overlay.style.top = '0';
+                      overlay.style.left = '0';
+                      overlay.style.width = '100vw';
+                      overlay.style.height = '100vh';
+                      overlay.style.backgroundColor = 'rgba(0,0,0,0.9)';
+                      overlay.style.zIndex = '99999';
+                      overlay.style.display = 'flex';
+                      overlay.style.justifyContent = 'center';
+                      overlay.style.alignItems = 'center';
+                      overlay.style.flexDirection = 'column';
+                      overlay.style.cursor = 'zoom-out';
+
+                      // Ảnh phóng to
+                      const bigImg = document.createElement('img');
+                      bigImg.src = task.screenshotURL;
+                      bigImg.style.maxWidth = '90%';
+                      bigImg.style.maxHeight = '85%';
+                      bigImg.style.boxShadow = '0 0 20px rgba(0,255,255,0.3)';
+                      bigImg.style.borderRadius = '5px';
+
+                      // Dòng chữ hướng dẫn đóng
+                      const text = document.createElement('p');
+                      text.innerHTML =
+                        '<i class="fa-solid fa-xmark"></i> Nhấn vào bất kỳ đâu để đóng';
+                      text.style.color = '#ccc';
+                      text.style.marginTop = '15px';
+                      text.style.fontSize = '1.1rem';
+
+                      overlay.appendChild(bigImg);
+                      overlay.appendChild(text);
+                      document.body.appendChild(overlay);
+
+                      // Click lần nữa để đóng
+                      overlay.onclick = () =>
+                        document.body.removeChild(overlay);
+                    };
+
+                    imgContainer.appendChild(img);
+                    term.appendChild(imgContainer);
                   }
 
                   log('--------------------------------------------------');
                 } else {
-                  log('⚠️ Kết quả chưa sẵn sàng hoặc đang xử lý.');
+                  log('⚠️ Kết quả chưa sẵn sàng. Vui lòng thử lại sau.');
                   log(`🔗 Link theo dõi: ${data.result}`);
                 }
               } catch (err) {
@@ -1054,52 +1105,49 @@ const demoData = {
           log(`❌ Lỗi API: ${res.status}`, 'error');
         }
       } catch (e) {
-        log('❌ Lỗi kết nối (Bị chặn CORS).', 'error');
-        log(
-          "👉 Hãy bật Extension 'Allow CORS' để chạy được API này trên trình duyệt.",
-          'cmd'
-        );
+        log('❌ Lỗi kết nối (CORS).', 'error');
+        log("👉 Hãy bật Extension 'Allow CORS' để chạy.", 'cmd');
       }
     },
   },
 
-  // --- 9. OPENAI (CHATGPT) - SMART MOCK ---
+  // --- 9. OPENAI (CHATGPT) - SMART MOCK (HỖ TRỢ CẢ 401 & 429) ---
   openai: {
     name: 'OpenAI API (ChatGPT)',
     filePath: './assets/codes/OpenAIAPI.py',
     langData: {
       vi: {
-        def: '<strong>Mô tả:</strong> Cổng kết nối AI tạo sinh (GPT-3.5/4). Hỗ trợ chat, viết code, dịch thuật.',
+        def: '<strong>Mô tả:</strong> Cổng kết nối tích hợp các mô hình AI tạo sinh (Generative AI) hàng đầu như GPT-3.5, GPT-4. Cung cấp khả năng xử lý ngôn ngữ tự nhiên (NLP) vượt trội.',
         usage: `<ul>
-                            <li><strong>Chatbot:</strong> CSKH tự động.</li>
-                            <li><strong>Content:</strong> Viết bài, tóm tắt.</li>
+                            <li><strong>Chatbot thông minh:</strong> Xây dựng hệ thống CSKH tự động 24/7.</li>
+                            <li><strong>Sáng tạo nội dung:</strong> Viết bài marketing, email, kịch bản video.</li>
+                            <li><strong>Hỗ trợ lập trình:</strong> Gợi ý code, debug lỗi.</li>
                         </ul>`,
         req: `<strong>Yêu cầu:</strong> Python, API Key (Có phí).<br>
                       <strong>Endpoint:</strong> <code>api.openai.com/v1/chat/completions</code><br>
                       <strong>Cách lấy Key:</strong><br>
                       1. Đăng ký tại <code>platform.openai.com</code>.<br>
-                      2. Vào menu <strong>API Keys</strong>.<br>
-                      3. Chọn "Create new secret key".`,
+                      2. Vào menu <strong>API Keys</strong> > "Create new secret key".`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Thông minh vượt trội, đa năng.</li>
-                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Tính phí theo token.</li>
+                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Thông minh vượt trội, đa năng, hệ sinh thái mạnh.</li>
+                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Tính phí theo token (Lỗi 429 nếu hết tiền).</li>
                            </ul>`,
       },
       en: {
-        def: '<strong>Description:</strong> Generative AI gateway (GPT-3.5/4). Supports chat, coding, translation.',
+        def: '<strong>Description:</strong> Integration gateway for leading Generative AI models like GPT-3.5, GPT-4. Offers superior NLP capabilities.',
         usage: `<ul>
-                            <li><strong>Chatbot:</strong> Auto support.</li>
-                            <li><strong>Content:</strong> Writing, summary.</li>
+                            <li><strong>Smart Chatbots:</strong> Automated customer support.</li>
+                            <li><strong>Content Creation:</strong> Marketing copy, emails.</li>
+                            <li><strong>Coding Support:</strong> Debugging, code suggestion.</li>
                         </ul>`,
         req: `<strong>Req:</strong> Python, API Key (Paid).<br>
                       <strong>Endpoint:</strong> <code>api.openai.com/v1/chat/completions</code><br>
                       <strong>Get Key:</strong><br>
                       1. Sign up at <code>platform.openai.com</code>.<br>
-                      2. Go to <strong>API Keys</strong> menu.<br>
-                      3. Click "Create new secret key".`,
+                      2. Go to <strong>API Keys</strong> > "Create new secret key".`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Pros:</strong> Superior intelligence.</li>
-                               <li style="color:#ce9178"><strong>Cons:</strong> Pay-per-token.</li>
+                               <li style="color:#4caf50"><strong>Pros:</strong> Superior intelligence, versatile.</li>
+                               <li style="color:#ce9178"><strong>Cons:</strong> Pay-per-token (Error 429 if quota exceeded).</li>
                            </ul>`,
       },
     },
@@ -1109,14 +1157,27 @@ const demoData = {
       const keyMatch = code.match(/api_key="(.*?)"/);
       const inputMatch = code.match(/user_input = "(.*?)"/);
 
-      // Key hết hạn của bạn (để kích hoạt chế độ giả lập)
+      // Key mặc định (để kích hoạt chế độ giả lập nếu user không nhập key mới)
       const defaultKey =
         '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';
       const key =
         keyMatch && keyMatch[1].length > 10 ? keyMatch[1] : defaultKey;
 
-      // Lấy câu hỏi người dùng nhập
       const prompt = inputMatch ? inputMatch[1] : 'Xin chào';
+
+      // Hàm hiển thị kết quả chuẩn
+      const printResult = (data) => {
+        log('--------------------------------------------------');
+        log('✅ PHẢN HỒI TỪ CHATGPT:', 'success');
+        log(data.choices[0].message.content);
+        log('--------------------------------------------------');
+        log('📊 THỐNG KÊ TOKEN (Chi phí):', 'cmd');
+        log(`- Prompt (Đầu vào):     ${data.usage.prompt_tokens} tokens`);
+        log(`- Completion (Đầu ra):  ${data.usage.completion_tokens} tokens`);
+        log(`- Tổng cộng:            ${data.usage.total_tokens} tokens`);
+        log(`\nℹ️ Model: ${data.model} | ID: ${data.id}`);
+        log('--------------------------------------------------');
+      };
 
       try {
         // Gọi API thật trước
@@ -1139,11 +1200,14 @@ const demoData = {
 
         if (res.status === 200) {
           const data = await res.json();
-          printOpenAIResult(data);
-        } else if (res.status === 429) {
-          // --- CHẾ ĐỘ GIẢ LẬP THÔNG MINH ---
+          printResult(data);
+        }
+        // --- KÍCH HOẠT GIẢ LẬP KHI: HẾT TIỀN (429) HOẶC SAI KEY (401) ---
+        else if (res.status === 429 || res.status === 401) {
+          const reason =
+            res.status === 429 ? 'Hết hạn mức (429)' : 'Key không hợp lệ (401)';
           log(
-            `⚠️ Tài khoản hết hạn mức (429). Kích hoạt chế độ MÔ PHỎNG NGỮ CẢNH...`,
+            `⚠️ Lỗi API: ${reason}. Đang kích hoạt chế độ GIẢ LẬP THÔNG MINH...`,
             'cmd'
           );
 
@@ -1154,15 +1218,15 @@ const demoData = {
           if (
             p.includes('code') ||
             p.includes('python') ||
-            p.includes('viết')
+            p.includes('viết hàm')
           ) {
             mockContent = `[MÔ PHỎNG] Dưới đây là ví dụ code Python bạn yêu cầu:\n\n\`\`\`python\ndef hello_world():\n    print("Hello from OpenAI!")\n\nhello_world()\n\`\`\`\n\nCode này định nghĩa một hàm đơn giản để in chuỗi ký tự ra màn hình.`;
           } else if (p.includes('tóm tắt') || p.includes('giải thích')) {
-            mockContent = `[MÔ PHỎNG] Để trả lời câu hỏi "${prompt}", tôi xin tóm tắt như sau:\n\nĐây là một khái niệm quan trọng trong khoa học máy tính/đời sống. Nó giúp tối ưu hóa quy trình và nâng cao hiệu suất làm việc. (Đây là văn bản giả lập vì API Key hết hạn).`;
+            mockContent = `[MÔ PHỎNG] Để trả lời câu hỏi "${prompt}", tôi xin giải thích như sau:\n\nĐây là một khái niệm quan trọng trong khoa học máy tính. Nó giúp tối ưu hóa quy trình và nâng cao hiệu suất làm việc của hệ thống. (Đây là phản hồi mẫu do Key API chưa sẵn sàng).`;
           } else if (p.includes('thơ') || p.includes('hát')) {
             mockContent = `[MÔ PHỎNG] Tặng bạn một đoạn thơ ngẫu hứng:\n\nTrăm năm trong cõi người ta\nCode không chạy được, thật là đắng cay.\nKey thì hết hạn hôm nay,\nChuyển sang giả lập, vẫn hay như thường!`;
           } else {
-            mockContent = `[MÔ PHỎNG] Tôi đã nhận được câu hỏi: "${prompt}".\n\nLà một mô hình AI, tôi có thể giúp bạn giải đáp vấn đề này chi tiết. Tuy nhiên, do API Key hiện tại đang bị giới hạn, tôi chỉ có thể phản hồi mẫu này. Vui lòng nạp thêm credit để nhận câu trả lời thực tế!`;
+            mockContent = `[MÔ PHỎNG] Tôi đã nhận được câu hỏi: "${prompt}".\n\nLà một mô hình AI, tôi có thể giúp bạn giải đáp vấn đề này chi tiết. Tuy nhiên, do API Key hiện tại đang gặp sự cố (401/429), tôi chỉ có thể phản hồi mẫu này. Vui lòng kiểm tra lại Key để nhận câu trả lời thực tế!`;
           }
 
           setTimeout(() => {
@@ -1181,7 +1245,7 @@ const demoData = {
               model: 'gpt-3.5-turbo-simulated',
               id: 'chatcmpl-SimulatedResponse',
             };
-            printOpenAIResult(mockData);
+            printResult(mockData);
           }, 1500);
         } else {
           const err = await res.json();
