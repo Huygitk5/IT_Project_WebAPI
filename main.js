@@ -12,31 +12,37 @@ const demoData = {
     filePath: './assets/codes/OpenWeatherMapAPI.py',
     langData: {
       vi: {
-        def: '<strong>Mô tả:</strong> Dịch vụ cung cấp dữ liệu thời tiết toàn cầu (nhiệt độ, độ ẩm, gió, mây...) cho hơn 200.000 thành phố. Dữ liệu được thu thập từ các trạm khí tượng, vệ tinh và radar.',
+        def: '<strong>Mô tả:</strong> Dịch vụ cung cấp dữ liệu thời tiết toàn cầu (nhiệt độ, độ ẩm, gió, mây...) cho hơn 200.000 thành phố.',
         usage: `<ul>
-                            <li><strong>Ứng dụng dự báo:</strong> Hiển thị thời tiết hiện tại và dự báo 7 ngày tới trên Smartphone/Web.</li>
-                            <li><strong>Nông nghiệp thông minh:</strong> Cảnh báo mưa bão, sương giá để bảo vệ mùa màng.</li>
-                            <li><strong>Du lịch & Sự kiện:</strong> Giúp lên kế hoạch tổ chức sự kiện ngoài trời dựa trên tình hình thời tiết.</li>
-                            <li><strong>Giao thông vận tải:</strong> Cảnh báo thời tiết xấu cho hàng không và vận tải biển.</li>
+                            <li><strong>Ứng dụng dự báo:</strong> Hiển thị thời tiết hiện tại và dự báo 7 ngày tới.</li>
+                            <li><strong>Nông nghiệp:</strong> Cảnh báo mưa bão để bảo vệ mùa màng.</li>
                         </ul>`,
-        req: '<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>.<br><strong>Endpoint:</strong> <code>api.openweathermap.org/data/2.5/weather</code>',
+        req: `<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>api.openweathermap.org/data/2.5/weather</code><br>
+                      <strong>Cách lấy Key:</strong><br>
+                      1. Truy cập <code>openweathermap.org</code> và đăng ký tài khoản.<br>
+                      2. Vào menu tài khoản > chọn <strong>My API Keys</strong>.<br>
+                      3. Copy Key mặc định (hoặc tạo mới).`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Dữ liệu phong phú, độ chính xác cao, cập nhật liên tục, gói Free hào phóng (60 gọi/phút).</li>
-                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> API Key miễn phí giới hạn tính năng nâng cao (như dự báo lịch sử dài hạn).</li>
+                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Dữ liệu chính xác, cập nhật liên tục, gói Free hào phóng.</li>
+                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Key mới tạo cần chờ 10-15 phút để kích hoạt.</li>
                            </ul>`,
       },
       en: {
-        def: '<strong>Description:</strong> A service providing global weather data (temperature, humidity, wind, clouds...) for over 200,000 cities. Data is collected from meteorological stations, satellites, and radars.',
+        def: '<strong>Description:</strong> Global weather data service (temp, humidity, wind...) for 200,000+ cities.',
         usage: `<ul>
-                            <li><strong>Forecast Apps:</strong> Display current weather and 7-day forecasts on Smartphones/Web.</li>
-                            <li><strong>Smart Agriculture:</strong> Storm and frost warnings to protect crops.</li>
-                            <li><strong>Tourism & Events:</strong> Assist in planning outdoor events based on weather conditions.</li>
-                            <li><strong>Transportation:</strong> Severe weather warnings for aviation and maritime shipping.</li>
+                            <li><strong>Forecast Apps:</strong> Display current weather & forecasts.</li>
+                            <li><strong>Agriculture:</strong> Storm warnings for crops.</li>
                         </ul>`,
-        req: '<strong>Req:</strong> API Key. Lib <code>requests</code>.<br><strong>Endpoint:</strong> <code>api.openweathermap.org/data/2.5/weather</code>',
+        req: `<strong>Req:</strong> API Key. Lib <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>api.openweathermap.org/data/2.5/weather</code><br>
+                      <strong>Get Key:</strong><br>
+                      1. Go to <code>openweathermap.org</code> & Sign up.<br>
+                      2. Go to Account menu > <strong>My API Keys</strong>.<br>
+                      3. Copy the default Key.`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Pros:</strong> Rich data, high accuracy, real-time updates, generous Free tier (60 calls/min).</li>
-                               <li style="color:#ce9178"><strong>Cons:</strong> Free API Key limits advanced features (like long-term historical data).</li>
+                               <li style="color:#4caf50"><strong>Pros:</strong> Accurate data, real-time updates, generous Free tier.</li>
+                               <li style="color:#ce9178"><strong>Cons:</strong> New keys take 10-15 mins to activate.</li>
                            </ul>`,
       },
     },
@@ -89,67 +95,87 @@ const demoData = {
     filePath: './assets/codes/TheMovieDatabaseAPI.py',
     langData: {
       vi: {
-        def: '<strong>Mô tả:</strong> Cơ sở dữ liệu phim ảnh và truyền hình lớn nhất do cộng đồng xây dựng. Cung cấp thông tin chi tiết về phim, diễn viên, đạo diễn, poster, trailer và xếp hạng.',
+        def: '<strong>Mô tả:</strong> Cơ sở dữ liệu phim ảnh lớn nhất do cộng đồng xây dựng. Cung cấp thông tin chi tiết về phim, diễn viên, poster, trailer.',
         usage: `<ul>
-                            <li><strong>Web xem phim:</strong> Hiển thị poster, nội dung tóm tắt và danh sách diễn viên.</li>
-                            <li><strong>Gợi ý phim:</strong> Xây dựng hệ thống đề xuất phim dựa trên sở thích người dùng.</li>
-                            <li><strong>Phân tích dữ liệu:</strong> Thống kê xu hướng điện ảnh và doanh thu phòng vé.</li>
+                            <li><strong>Web phim:</strong> Hiển thị poster, nội dung tóm tắt.</li>
+                            <li><strong>Gợi ý phim:</strong> Hệ thống đề xuất dựa trên sở thích.</li>
                         </ul>`,
-        req: '<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>.<br><strong>Endpoint:</strong> <code>api.themoviedb.org/3/search/movie</code>',
+        req: `<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>api.themoviedb.org/3/search/movie</code><br>
+                      <strong>Cách lấy Key:</strong><br>
+                      1. Đăng ký tại <code>themoviedb.org</code>.<br>
+                      2. Vào <strong>Settings</strong> > <strong>API</strong>.<br>
+                      3. Chọn "Create" > "Developer" để lấy Key.`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Dữ liệu khổng lồ, hỗ trợ nhiều ngôn ngữ (bao gồm tiếng Việt), miễn phí sử dụng.</li>
-                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Dữ liệu do cộng đồng đóng góp nên đôi khi có sai sót nhỏ hoặc chậm cập nhật phim mới ra mắt.</li>
+                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Dữ liệu khổng lồ, hỗ trợ tiếng Việt, miễn phí.</li>
+                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Cần khai báo thông tin ứng dụng khi đăng ký Key.</li>
                            </ul>`,
       },
       en: {
-        def: '<strong>Description:</strong> The largest community-built database for movies and TV shows. Provides details on films, actors, directors, posters, trailers, and ratings.',
+        def: '<strong>Description:</strong> Largest community-built movie database. Provides details on films, actors, posters.',
         usage: `<ul>
-                            <li><strong>Streaming Sites:</strong> Display posters, plot summaries, and cast lists.</li>
-                            <li><strong>Movie Recommendations:</strong> Build recommendation systems based on user preferences.</li>
-                            <li><strong>Data Analysis:</strong> Analyze cinema trends and box office revenue.</li>
+                            <li><strong>Movie Sites:</strong> Show posters & plot summaries.</li>
+                            <li><strong>Recommendations:</strong> Suggest films based on user taste.</li>
                         </ul>`,
-        req: '<strong>Req:</strong> API Key. Lib <code>requests</code>.<br><strong>Endpoint:</strong> <code>api.themoviedb.org/3/search/movie</code>',
+        req: `<strong>Req:</strong> API Key. Lib <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>api.themoviedb.org/3/search/movie</code><br>
+                      <strong>Get Key:</strong><br>
+                      1. Sign up at <code>themoviedb.org</code>.<br>
+                      2. Go to <strong>Settings</strong> > <strong>API</strong>.<br>
+                      3. Click "Create" > "Developer" to generate Key.`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Pros:</strong> Massive database, supports multiple languages (including Vietnamese), free to use.</li>
-                               <li style="color:#ce9178"><strong>Cons:</strong> Community-contributed data may occasionally have minor errors or lag in updating newly released films.</li>
+                               <li style="color:#4caf50"><strong>Pros:</strong> Huge database, supports Vietnamese, free.</li>
+                               <li style="color:#ce9178"><strong>Cons:</strong> Requires app details registration.</li>
                            </ul>`,
       },
     },
     action: async (code) => {
       log('>>> Đang tìm kiếm trên TMDB...', 'cmd');
-      const queryMatch = code.match(/'query': '(.*?)'/);
+
+      // Regex mới: Tìm dòng query = "..." hoặc query = '...'
+      const queryMatch = code.match(/query\s*=\s*["'](.*?)["']/);
+
       const keyMatch = code.match(/api_key = "(.*?)"/);
+
+      // Nếu đọc được tên phim từ code thì dùng, nếu không mới dùng 'Mưa đỏ'
       const query = queryMatch ? queryMatch[1] : 'Mưa đỏ';
       const key = keyMatch ? keyMatch[1] : '';
+
+      log(`>>> Từ khóa tìm kiếm: "${query}"`, 'cmd'); // In ra để kiểm tra xem đã nhận đúng chưa
 
       try {
         const url = `https://api.themoviedb.org/3/search/movie?api_key=${key}&query=${query}&language=vi-VN`;
         const res = await fetch(url);
+
         if (res.status === 200) {
           const data = await res.json();
+
           if (data.results && data.results.length > 0) {
             const m = data.results[0];
             log('--------------------------------------------------');
             log(
-              `🎬 ${m.title.toUpperCase()} (${m.release_date.split('-')[0]})`,
+              `🎬 ${m.title.toUpperCase()} (${
+                m.release_date ? m.release_date.split('-')[0] : 'N/A'
+              })`,
               'success'
             );
             log(`⭐ Điểm: ${m.vote_average}/10 (Vote: ${m.vote_count})`);
-            log(`📈 Popularity: ${m.popularity}`);
-            log(`📝 Nội dung: ${m.overview}`);
+            log(`📝 Nội dung: ${m.overview || 'Chưa có mô tả'}`);
+
             if (m.poster_path) {
               log('🖼️ Poster:');
               log(`https://image.tmdb.org/t/p/w200${m.poster_path}`, 'image');
             }
             log('--------------------------------------------------');
           } else {
-            log('❌ Không tìm thấy phim nào.', 'error');
+            // Nếu API trả về rỗng (không tìm thấy phim)
+            log(`❌ Không tìm thấy phim nào có tên: "${query}"`, 'error');
           }
         } else {
           log(`❌ Lỗi API: ${res.status}`, 'error');
         }
       } catch (e) {
-        log('❌ Lỗi mạng.', 'error');
+        log('❌ Lỗi mạng hoặc sai Key.', 'error');
       }
     },
   },
@@ -160,31 +186,37 @@ const demoData = {
     filePath: './assets/codes/UnsplashAPI.py',
     langData: {
       vi: {
-        def: '<strong>Mô tả:</strong> API cung cấp quyền truy cập vào thư viện ảnh chất lượng cao miễn phí lớn nhất thế giới. Cho phép tìm kiếm, tải và lấy thông tin chi tiết (tác giả, kích thước, EXIF...) của hình ảnh.',
+        def: '<strong>Mô tả:</strong> Thư viện ảnh chất lượng cao miễn phí lớn nhất thế giới. Cho phép tìm kiếm và tải ảnh 4K.',
         usage: `<ul>
-                            <li><strong>Thiết kế UI/UX:</strong> Nguồn ảnh placeholder ngẫu nhiên, sinh động cho demo website.</li>
-                            <li><strong>CMS & Blog:</strong> Tích hợp công cụ tìm ảnh minh họa ngay trong trình soạn thảo văn bản.</li>
-                            <li><strong>Ứng dụng hình nền:</strong> Tự động thay đổi hình nền điện thoại/máy tính theo chủ đề mỗi ngày.</li>
-                            <li><strong>Marketing:</strong> Tìm ảnh lifestyle hoặc ảnh sản phẩm mẫu để thiết kế banner.</li>
+                            <li><strong>UI/UX:</strong> Ảnh placeholder cho demo website.</li>
+                            <li><strong>Marketing:</strong> Tìm ảnh lifestyle thiết kế banner.</li>
                         </ul>`,
-        req: '<strong>Yêu cầu:</strong> Access Key. Thư viện <code>requests</code>.<br><strong>Endpoint:</strong> <code>api.unsplash.com/search/photos</code>',
+        req: `<strong>Yêu cầu:</strong> Access Key. Thư viện <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>api.unsplash.com/search/photos</code><br>
+                      <strong>Cách lấy Key:</strong><br>
+                      1. Truy cập <code>unsplash.com/developers</code> > Đăng ký.<br>
+                      2. Nhấn <strong>New Application</strong> > Đồng ý điều khoản.<br>
+                      3. Copy mã tại dòng <strong>Access Key</strong>.`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Ảnh chất lượng xuất sắc (4K), miễn phí bản quyền, JSON dễ hiểu.</li>
-                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Gói Demo giới hạn 50 request/giờ, chưa hỗ trợ tìm kiếm video.</li>
+                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Ảnh xuất sắc, miễn phí bản quyền.</li>
+                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Giới hạn 50 request/giờ (Demo).</li>
                            </ul>`,
       },
       en: {
-        def: "<strong>Description:</strong> API providing access to the world's largest free high-resolution photo library. Allows searching, downloading, and retrieving detailed photo metadata (author, size, EXIF...).",
+        def: "<strong>Description:</strong> World's largest free high-res photo library. Allows searching and downloading 4K images.",
         usage: `<ul>
-                            <li><strong>UI/UX Design:</strong> Rich and random placeholder images for website demos.</li>
-                            <li><strong>CMS & Blogs:</strong> Integrated photo search tools directly within text editors.</li>
-                            <li><strong>Wallpaper Apps:</strong> Automatically change phone/desktop wallpapers based on daily themes.</li>
-                            <li><strong>Marketing:</strong> Find lifestyle or product mockup images for banner design.</li>
+                            <li><strong>UI/UX:</strong> Placeholders for web demos.</li>
+                            <li><strong>Marketing:</strong> Lifestyle images for banners.</li>
                         </ul>`,
-        req: '<strong>Req:</strong> Access Key. Lib <code>requests</code>.<br><strong>Endpoint:</strong> <code>api.unsplash.com/search/photos</code>',
+        req: `<strong>Req:</strong> Access Key. Lib <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>api.unsplash.com/search/photos</code><br>
+                      <strong>Get Key:</strong><br>
+                      1. Go to <code>unsplash.com/developers</code> > Register.<br>
+                      2. Click <strong>New Application</strong> > Accept terms.<br>
+                      3. Copy the <strong>Access Key</strong>.`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Pros:</strong> Excellent image quality (4K), royalty-free, easy-to-understand JSON.</li>
-                               <li style="color:#ce9178"><strong>Cons:</strong> Demo tier limited to 50 requests/hour, no video search support yet.</li>
+                               <li style="color:#4caf50"><strong>Pros:</strong> Excellent quality, royalty-free.</li>
+                               <li style="color:#ce9178"><strong>Cons:</strong> Limited to 50 reqs/hour (Demo).</li>
                            </ul>`,
       },
     },
@@ -473,31 +505,35 @@ const demoData = {
     filePath: './assets/codes/RESTCountriesAPI.py',
     langData: {
       vi: {
-        def: '<strong>Mô tả:</strong> API cung cấp dữ liệu thông tin về các quốc gia trên thế giới. Dữ liệu bao gồm tên, thủ đô, khu vực, dân số, diện tích, quốc kỳ, ngôn ngữ, tiền tệ, múi giờ và các mã quốc gia tiêu chuẩn.',
+        def: '<strong>Mô tả:</strong> API cung cấp dữ liệu quốc gia (tên, thủ đô, cờ, dân số, tiền tệ...).',
         usage: `<ul>
-                            <li><strong>Thương mại điện tử:</strong> Tự động điền mã vùng điện thoại (+84...), gợi ý địa chỉ giao hàng.</li>
-                            <li><strong>Giáo dục & Tra cứu:</strong> Xây dựng từ điển địa lý, bản đồ số hoặc trò chơi đố vui (Quiz).</li>
-                            <li><strong>Du lịch:</strong> Cung cấp thông tin tiền tệ, ngôn ngữ và hình ảnh cờ cho khách du lịch.</li>
-                            <li><strong>Hiển thị dữ liệu:</strong> Hiển thị icon lá cờ bên cạnh ngôn ngữ hoặc số điện thoại trên giao diện.</li>
+                            <li><strong>Form điền:</strong> Tự động điền mã vùng, địa chỉ.</li>
+                            <li><strong>Giáo dục:</strong> Từ điển địa lý, Quiz.</li>
                         </ul>`,
-        req: '<strong>Yêu cầu:</strong> Thư viện <code>requests</code>. KHÔNG cần API Key.<br><strong>Endpoint:</strong> <code>restcountries.com/v3.1/name/{name}</code>',
+        req: `<strong>Yêu cầu:</strong> Thư viện <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>restcountries.com/v3.1/name/{name}</code><br>
+                      <strong>Cách lấy Key:</strong><br>
+                      ✅ API này hoàn toàn <strong>Miễn phí & Công khai</strong> (Public API).<br>
+                      👉 Không cần đăng ký tài khoản hay tạo Key.`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Hoàn toàn mở, không cần đăng ký tài khoản, dễ triển khai, miễn phí.</li>
-                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Dữ liệu tĩnh (dân số không real-time), server cộng đồng đôi khi phản hồi chậm.</li>
+                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Không cần Key, miễn phí, dễ dùng.</li>
+                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Dữ liệu dân số cập nhật chậm.</li>
                            </ul>`,
       },
       en: {
-        def: '<strong>Description:</strong> API providing data about world countries. Includes name, capital, region, population, area, flag, language, currency, timezones, and standard country codes.',
+        def: '<strong>Description:</strong> API providing country data (name, capital, flag, population...).',
         usage: `<ul>
-                            <li><strong>E-commerce:</strong> Auto-fill phone codes (+1...), suggest shipping addresses.</li>
-                            <li><strong>Education & Reference:</strong> Build geography dictionaries, digital maps, or quiz games.</li>
-                            <li><strong>Travel:</strong> Provide currency, language, and flag info for travelers.</li>
-                            <li><strong>UI Display:</strong> Show flag icons next to languages or phone numbers on interfaces.</li>
+                            <li><strong>Forms:</strong> Auto-fill codes, addresses.</li>
+                            <li><strong>Education:</strong> Geography quiz.</li>
                         </ul>`,
-        req: '<strong>Req:</strong> Lib <code>requests</code>. NO API Key needed.<br><strong>Endpoint:</strong> <code>restcountries.com/v3.1/name/{name}</code>',
+        req: `<strong>Req:</strong> Lib <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>restcountries.com/v3.1/name/{name}</code><br>
+                      <strong>Get Key:</strong><br>
+                      ✅ This is a <strong>Public API</strong>.<br>
+                      👉 No registration or Key required.`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Pros:</strong> Fully open, no registration required, easy to implement, free.</li>
-                               <li style="color:#ce9178"><strong>Cons:</strong> Static data (population not real-time), community servers can sometimes be slow.</li>
+                               <li style="color:#4caf50"><strong>Pros:</strong> No Key needed, free, easy.</li>
+                               <li style="color:#ce9178"><strong>Cons:</strong> Static population data.</li>
                            </ul>`,
       },
     },
@@ -622,31 +658,37 @@ const demoData = {
     filePath: './assets/codes/ExchangeRateAPI.py',
     langData: {
       vi: {
-        def: '<strong>Mô tả:</strong> Dịch vụ tài chính cung cấp tỷ giá hối đoái tiền tệ chính xác từ các ngân hàng trung ương. Hỗ trợ quy đổi hơn 160 loại tiền tệ (USD, VND, EUR...). Dữ liệu trả về JSON chứa tỷ lệ chuyển đổi.',
+        def: '<strong>Mô tả:</strong> Cung cấp tỷ giá hối đoái chính xác từ ngân hàng trung ương (160+ tiền tệ).',
         usage: `<ul>
-                            <li><strong>Thương mại điện tử đa quốc gia:</strong> Hiển thị giá sản phẩm theo đơn vị tiền tệ địa phương của khách hàng.</li>
-                            <li><strong>Công nghệ tài chính (Fintech):</strong> Tính toán chi phí chuyển tiền quốc tế hoặc quy đổi trong ví điện tử.</li>
-                            <li><strong>Kế toán & Báo cáo:</strong> Tự động quy đổi doanh thu từ nhiều thị trường về một đồng tiền chuẩn.</li>
-                            <li><strong>Du lịch:</strong> Giúp khách du lịch tính toán nhanh chi phí mua sắm tại nước ngoài.</li>
+                            <li><strong>TMĐT:</strong> Hiển thị giá theo tiền tệ khách hàng.</li>
+                            <li><strong>Du lịch:</strong> Tính chi phí mua sắm.</li>
                         </ul>`,
-        req: '<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>.<br><strong>Endpoint:</strong> <code>v6.exchangerate-api.com/v6/{KEY}/latest/{Base}</code>',
+        req: `<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>v6.exchangerate-api.com/v6/{KEY}/latest/{Base}</code><br>
+                      <strong>Cách lấy Key:</strong><br>
+                      1. Truy cập <code>exchangerate-api.com</code>.<br>
+                      2. Nhập email vào ô "Get Free Key".<br>
+                      3. Kiểm tra email để lấy Key.`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Độ tin cậy cao, dữ liệu chuẩn xác, cấu trúc JSON gọn nhẹ, có gói miễn phí vĩnh viễn.</li>
-                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Gói miễn phí cập nhật chậm (1 lần/ngày), giới hạn số lượng request hàng tháng.</li>
+                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Dữ liệu chuẩn, có gói Free vĩnh viễn.</li>
+                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Gói Free cập nhật tỷ giá 1 lần/ngày.</li>
                            </ul>`,
       },
       en: {
-        def: '<strong>Description:</strong> Financial service providing accurate currency exchange rates from central banks. Supports conversion for 160+ currencies (USD, VND, EUR...). Returns JSON data with conversion rates.',
+        def: '<strong>Description:</strong> Accurate exchange rates for 160+ currencies.',
         usage: `<ul>
-                            <li><strong>Global E-commerce:</strong> Display product prices in the customer's local currency.</li>
-                            <li><strong>Fintech:</strong> Calculate international transfer fees or e-wallet conversions.</li>
-                            <li><strong>Accounting:</strong> Automatically convert revenue from multiple markets to a standard currency.</li>
-                            <li><strong>Travel:</strong> Help tourists quickly calculate shopping costs abroad.</li>
+                            <li><strong>E-commerce:</strong> Local currency pricing.</li>
+                            <li><strong>Travel:</strong> Cost calculation.</li>
                         </ul>`,
-        req: '<strong>Req:</strong> API Key. Lib <code>requests</code>.<br><strong>Endpoint:</strong> <code>v6.exchangerate-api.com/v6/{KEY}/latest/{Base}</code>',
+        req: `<strong>Req:</strong> API Key. Lib <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>v6.exchangerate-api.com/v6/{KEY}/latest/{Base}</code><br>
+                      <strong>Get Key:</strong><br>
+                      1. Go to <code>exchangerate-api.com</code>.<br>
+                      2. Enter email in "Get Free Key".<br>
+                      3. Check email to retrieve Key.`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Pros:</strong> High reliability, accurate data, simple JSON structure, forever free tier available.</li>
-                               <li style="color:#ce9178"><strong>Cons:</strong> Free tier updates slowly (once/day), limited monthly requests.</li>
+                               <li style="color:#4caf50"><strong>Pros:</strong> Accurate, Forever Free tier.</li>
+                               <li style="color:#ce9178"><strong>Cons:</strong> Free tier updates daily only.</li>
                            </ul>`,
       },
     },
@@ -739,29 +781,35 @@ const demoData = {
     filePath: './assets/codes/QRServerAPI.py',
     langData: {
       vi: {
-        def: '<strong>Mô tả:</strong> API tiện ích cho phép tạo mã QR nhanh chóng từ văn bản, URL hoặc dữ liệu bất kỳ. Hỗ trợ tùy chỉnh kích thước ảnh đầu ra.',
+        def: '<strong>Mô tả:</strong> Tạo mã QR nhanh từ văn bản, URL. Hỗ trợ tùy chỉnh kích thước.',
         usage: `<ul>
-                            <li><strong>Thanh toán điện tử:</strong> Tạo mã VietQR để chuyển khoản nhanh.</li>
-                            <li><strong>Kết nối tiện ích:</strong> Chia sẻ mật khẩu Wi-Fi, danh thiếp (vCard) hoặc vé sự kiện.</li>
-                            <li><strong>Marketing:</strong> Dẫn khách hàng tới website khuyến mãi hoặc tải ứng dụng.</li>
+                            <li><strong>Thanh toán:</strong> QR chuyển khoản.</li>
+                            <li><strong>Tiện ích:</strong> Chia sẻ Wi-Fi, Link.</li>
                         </ul>`,
-        req: '<strong>Yêu cầu:</strong> Thư viện <code>requests</code>. Không cần API Key.<br><strong>Endpoint:</strong> <code>api.qrserver.com/v1/create-qr-code</code>',
+        req: `<strong>Yêu cầu:</strong> Thư viện <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>api.qrserver.com/v1/create-qr-code</code><br>
+                      <strong>Cách lấy Key:</strong><br>
+                      ✅ API này <strong>Miễn phí & Công khai</strong>.<br>
+                      👉 Không cần đăng ký Key.`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Hoàn toàn miễn phí, không cần đăng ký, tốc độ phản hồi nhanh.</li>
-                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Chỉ tạo được QR tĩnh (không sửa được nội dung sau khi tạo), ít tùy biến màu sắc.</li>
+                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Miễn phí, không cần đăng ký.</li>
+                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Chỉ tạo QR tĩnh (không sửa được).</li>
                            </ul>`,
       },
       en: {
-        def: '<strong>Description:</strong> Utility API for quickly generating QR codes from text, URLs, or any data. Supports custom output image sizes.',
+        def: '<strong>Description:</strong> Generate QR codes from text/URLs. Custom sizes supported.',
         usage: `<ul>
-                            <li><strong>E-payments:</strong> Generate QR codes for quick bank transfers.</li>
-                            <li><strong>Utilities:</strong> Share Wi-Fi passwords, digital business cards (vCard), or event tickets.</li>
-                            <li><strong>Marketing:</strong> Direct customers to promotional websites or app downloads.</li>
+                            <li><strong>Payments:</strong> QR Transfers.</li>
+                            <li><strong>Utility:</strong> Share Wi-Fi, Links.</li>
                         </ul>`,
-        req: '<strong>Req:</strong> Lib <code>requests</code>. No API Key.<br><strong>Endpoint:</strong> <code>api.qrserver.com/v1/create-qr-code</code>',
+        req: `<strong>Req:</strong> Lib <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>api.qrserver.com/v1/create-qr-code</code><br>
+                      <strong>Get Key:</strong><br>
+                      ✅ <strong>Public API</strong>.<br>
+                      👉 No Key required.`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Pros:</strong> Completely free, no registration needed, fast response time.</li>
-                               <li style="color:#ce9178"><strong>Cons:</strong> Only generates Static QR codes (cannot edit content later), limited color customization.</li>
+                               <li style="color:#4caf50"><strong>Pros:</strong> Free, no registration.</li>
+                               <li style="color:#ce9178"><strong>Cons:</strong> Static QR only.</li>
                            </ul>`,
       },
     },
@@ -865,31 +913,37 @@ const demoData = {
     filePath: './assets/codes/URLScan.py',
     langData: {
       vi: {
-        def: '<strong>Mô tả:</strong> API an toàn thông tin giúp quét và phân tích URL để phát hiện mối đe dọa. Cung cấp thông tin chi tiết: yêu cầu mạng, mã JS, địa chỉ IP, SSL và hành vi trang web.',
+        def: '<strong>Mô tả:</strong> Quét và phân tích URL để phát hiện lừa đảo, mã độc.',
         usage: `<ul>
-                            <li><strong>Phát hiện lừa đảo (Phishing):</strong> Kiểm tra các đường link nghi ngờ trong email/tin nhắn trước khi click.</li>
-                            <li><strong>Giám sát thương hiệu:</strong> Phát hiện các website giả mạo giao diện của ngân hàng hoặc doanh nghiệp.</li>
-                            <li><strong>Phân tích kỹ thuật:</strong> Xem công nghệ web, vị trí server, tài nguyên tải về.</li>
-                            <li><strong>Điều tra sự cố:</strong> Hỗ trợ chuyên gia bảo mật phân tích nguồn gốc trang web độc hại.</li>
+                            <li><strong>Bảo mật:</strong> Kiểm tra link lạ.</li>
+                            <li><strong>Phân tích:</strong> Xem IP, Server trang web.</li>
                         </ul>`,
-        req: '<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>.<br><strong>Endpoint:</strong> <code>urlscan.io/api/v1/scan/</code>',
+        req: `<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>urlscan.io/api/v1/scan/</code><br>
+                      <strong>Cách lấy Key:</strong><br>
+                      1. Đăng ký tại <code>urlscan.io</code>.<br>
+                      2. Vào <strong>Settings & API</strong>.<br>
+                      3. Chọn "Create new API Key".`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Phân tích rất sâu (DOM, Screenshot), an toàn tuyệt đối (không cần truy cập trực tiếp).</li>
-                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Quy trình phức tạp (Bất đồng bộ - phải chờ server quét), dữ liệu chuyên ngành khó đọc.</li>
+                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Phân tích sâu, an toàn tuyệt đối.</li>
+                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Phải chờ server quét (15-20s).</li>
                            </ul>`,
       },
       en: {
-        def: '<strong>Description:</strong> Security API to scan and analyze URLs for threats. Provides details on network requests, JS code, IPs, SSL, and website behavior.',
+        def: '<strong>Description:</strong> Scan & analyze URLs for phishing/malware.',
         usage: `<ul>
-                            <li><strong>Phishing Detection:</strong> Check suspicious links in emails/messages before clicking.</li>
-                            <li><strong>Brand Monitoring:</strong> Detect fake websites mimicking banks or businesses.</li>
-                            <li><strong>Technical Analysis:</strong> Inspect web technologies, server location, and loaded resources.</li>
-                            <li><strong>Incident Investigation:</strong> Assist security experts in analyzing malicious website origins.</li>
+                            <li><strong>Security:</strong> Check suspicious links.</li>
+                            <li><strong>Analysis:</strong> Inspect Server/IP.</li>
                         </ul>`,
-        req: '<strong>Req:</strong> API Key. Lib <code>requests</code>.<br><strong>Endpoint:</strong> <code>urlscan.io/api/v1/scan/</code>',
+        req: `<strong>Req:</strong> API Key. Lib <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>urlscan.io/api/v1/scan/</code><br>
+                      <strong>Get Key:</strong><br>
+                      1. Sign up at <code>urlscan.io</code>.<br>
+                      2. Go to <strong>Settings & API</strong>.<br>
+                      3. Click "Create new API Key".`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Pros:</strong> Deep analysis (DOM, Screenshot), absolute safety (no direct access required).</li>
-                               <li style="color:#ce9178"><strong>Cons:</strong> Complex process (Asynchronous - requires wait time), technical data can be hard to read.</li>
+                               <li style="color:#4caf50"><strong>Pros:</strong> Deep analysis, safe.</li>
+                               <li style="color:#ce9178"><strong>Cons:</strong> Wait time required (~15s).</li>
                            </ul>`,
       },
     },
@@ -1015,31 +1069,37 @@ const demoData = {
     filePath: './assets/codes/OpenAIAPI.py',
     langData: {
       vi: {
-        def: '<strong>Mô tả:</strong> Cổng kết nối tích hợp các mô hình AI tạo sinh (Generative AI) hàng đầu như GPT-3.5, GPT-4. Cung cấp khả năng xử lý ngôn ngữ tự nhiên (NLP) vượt trội: hiểu ngữ cảnh, sinh văn bản, dịch thuật và viết code.',
+        def: '<strong>Mô tả:</strong> Cổng kết nối AI tạo sinh (GPT-3.5/4). Hỗ trợ chat, viết code, dịch thuật.',
         usage: `<ul>
-                            <li><strong>Chatbot thông minh:</strong> Xây dựng hệ thống CSKH tự động 24/7, đối đáp tự nhiên như người.</li>
-                            <li><strong>Sáng tạo nội dung:</strong> Hỗ trợ viết bài marketing, email, kịch bản video, tóm tắt tài liệu.</li>
-                            <li><strong>Hỗ trợ lập trình:</strong> Tích hợp vào IDE để gợi ý code, debug lỗi và tối ưu thuật toán.</li>
-                            <li><strong>Phân tích dữ liệu:</strong> Trích xuất thông tin quan trọng từ văn bản hoặc phân tích cảm xúc.</li>
+                            <li><strong>Chatbot:</strong> CSKH tự động.</li>
+                            <li><strong>Content:</strong> Viết bài, tóm tắt.</li>
                         </ul>`,
-        req: '<strong>Yêu cầu:</strong> Python, API Key (Có phí).<br><strong>Endpoint:</strong> <code>api.openai.com/v1/chat/completions</code>',
+        req: `<strong>Yêu cầu:</strong> Python, API Key (Có phí).<br>
+                      <strong>Endpoint:</strong> <code>api.openai.com/v1/chat/completions</code><br>
+                      <strong>Cách lấy Key:</strong><br>
+                      1. Đăng ký tại <code>platform.openai.com</code>.<br>
+                      2. Vào menu <strong>API Keys</strong>.<br>
+                      3. Chọn "Create new secret key".`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Thông minh vượt trội, đa năng, hệ sinh thái hỗ trợ mạnh mẽ.</li>
-                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Tính phí dựa trên token, đôi khi gặp hiện tượng ảo giác AI (thông tin sai lệch).</li>
+                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Thông minh vượt trội, đa năng.</li>
+                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Tính phí theo token.</li>
                            </ul>`,
       },
       en: {
-        def: '<strong>Description:</strong> Integration gateway for leading Generative AI models like GPT-3.5, GPT-4. Offers superior NLP capabilities: context understanding, text generation, translation, and coding support.',
+        def: '<strong>Description:</strong> Generative AI gateway (GPT-3.5/4). Supports chat, coding, translation.',
         usage: `<ul>
-                            <li><strong>Smart Chatbots:</strong> Build 24/7 automated customer support that converses naturally.</li>
-                            <li><strong>Content Creation:</strong> Assist in writing marketing copy, emails, scripts, and summarizing docs.</li>
-                            <li><strong>Coding Support:</strong> IDE integration for code suggestions, debugging, and algorithm optimization.</li>
-                            <li><strong>Data Analysis:</strong> Extract key information from text or analyze sentiment.</li>
+                            <li><strong>Chatbot:</strong> Auto support.</li>
+                            <li><strong>Content:</strong> Writing, summary.</li>
                         </ul>`,
-        req: '<strong>Req:</strong> Python, API Key (Paid).<br><strong>Endpoint:</strong> <code>api.openai.com/v1/chat/completions</code>',
+        req: `<strong>Req:</strong> Python, API Key (Paid).<br>
+                      <strong>Endpoint:</strong> <code>api.openai.com/v1/chat/completions</code><br>
+                      <strong>Get Key:</strong><br>
+                      1. Sign up at <code>platform.openai.com</code>.<br>
+                      2. Go to <strong>API Keys</strong> menu.<br>
+                      3. Click "Create new secret key".`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Pros:</strong> Superior intelligence, versatile, strong ecosystem support.</li>
-                               <li style="color:#ce9178"><strong>Cons:</strong> Pay-per-token pricing, potential AI hallucinations (incorrect info).</li>
+                               <li style="color:#4caf50"><strong>Pros:</strong> Superior intelligence.</li>
+                               <li style="color:#ce9178"><strong>Cons:</strong> Pay-per-token.</li>
                            </ul>`,
       },
     },
@@ -1140,29 +1200,37 @@ const demoData = {
     filePath: './assets/codes/RemoveBGAPI.py',
     langData: {
       vi: {
-        def: '<strong>Mô tả:</strong> Công cụ AI mạnh mẽ giúp tách nền khỏi chủ thể (người, vật, xe...) trong bức ảnh chỉ trong vài giây với độ chính xác cực cao, kể cả các chi tiết khó như tóc.',
+        def: '<strong>Mô tả:</strong> Công cụ AI tách nền ảnh tự động với độ chính xác cao (xử lý tốt cả tóc).',
         usage: `<ul>
-                            <li><strong>Thương mại điện tử:</strong> Tự động xóa nền ảnh sản phẩm để làm ảnh đại diện chuyên nghiệp.</li>
-                            <li><strong>Thiết kế đồ họa:</strong> Giảm thời gian cắt ghép thủ công cho Designer.</li>
-                            <li><strong>Hồ sơ cá nhân:</strong> Tạo ảnh thẻ hoặc ảnh profile từ ảnh chụp đời thường.</li>
+                            <li><strong>TMĐT:</strong> Xóa nền ảnh sản phẩm.</li>
+                            <li><strong>Thiết kế:</strong> Giảm thời gian cắt ghép thủ công.</li>
                         </ul>`,
-        req: '<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>.<br><strong>Endpoint:</strong> <code>api.remove.bg/v1.0/removebg</code>',
+        req: `<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>api.remove.bg/v1.0/removebg</code><br>
+                      <strong>Cách lấy Key:</strong><br>
+                      1. Đăng ký tại <code>remove.bg</code>.<br>
+                      2. Vào <strong>Tools & API</strong> > <strong>API Key</strong>.<br>
+                      3. Nhấn "New API Key" để tạo.`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Xử lý cực nhanh, chính xác với tóc và lông thú, hoàn toàn tự động.</li>
-                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Gói miễn phí chỉ cho tải ảnh kết quả kích thước nhỏ (Preview), ảnh Full HD tính phí đắt.</li>
+                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Cực nhanh, chính xác, tự động hóa 100%.</li>
+                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Tài khoản Free chỉ tải được ảnh nhỏ (Preview).</li>
                            </ul>`,
       },
       en: {
-        def: '<strong>Description:</strong> A powerful AI tool that removes backgrounds from subjects (people, objects, cars...) in seconds with extreme precision, handling difficult details like hair effortlessly.',
+        def: '<strong>Description:</strong> AI tool for automatic background removal with high precision.',
         usage: `<ul>
-                            <li><strong>E-commerce:</strong> Automatically remove product backgrounds for professional listings.</li>
-                            <li><strong>Graphic Design:</strong> Reduce manual masking time for Designers.</li>
-                            <li><strong>Personal Profiles:</strong> Create ID photos or profile pictures from casual snapshots.</li>
+                            <li><strong>E-commerce:</strong> Remove product backgrounds.</li>
+                            <li><strong>Design:</strong> Save manual masking time.</li>
                         </ul>`,
-        req: '<strong>Req:</strong> API Key. Lib <code>requests</code>.<br><strong>Endpoint:</strong> <code>api.remove.bg/v1.0/removebg</code>',
+        req: `<strong>Req:</strong> API Key. Lib <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>api.remove.bg/v1.0/removebg</code><br>
+                      <strong>Get Key:</strong><br>
+                      1. Sign up at <code>remove.bg</code>.<br>
+                      2. Go to <strong>Tools & API</strong> > <strong>API Key</strong>.<br>
+                      3. Click "New API Key".`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Pros:</strong> Extremely fast, accurate with hair/fur, fully automated.</li>
-                               <li style="color:#ce9178"><strong>Cons:</strong> Free plan only allows small preview downloads; Full HD images are expensive.</li>
+                               <li style="color:#4caf50"><strong>Pros:</strong> Fast, accurate, fully automated.</li>
+                               <li style="color:#ce9178"><strong>Cons:</strong> Free account only allows small preview downloads.</li>
                            </ul>`,
       },
     },
@@ -1193,29 +1261,35 @@ const demoData = {
     filePath: './assets/codes/OCRSpaceAPI.py',
     langData: {
       vi: {
-        def: '<strong>Mô tả:</strong> Dịch vụ nhận dạng ký tự quang học (OCR) giúp chuyển đổi hình ảnh hoặc file PDF chứa văn bản thành dạng chữ có thể chỉnh sửa được (Text/JSON).',
+        def: '<strong>Mô tả:</strong> Chuyển đổi hình ảnh/PDF thành văn bản (OCR).',
         usage: `<ul>
-                            <li><strong>Số hóa tài liệu:</strong> Chuyển hợp đồng, hóa đơn giấy thành file mềm để lưu trữ.</li>
-                            <li><strong>Trích xuất dữ liệu:</strong> Tự động đọc số CMND, biển số xe từ ảnh chụp.</li>
-                            <li><strong>Hỗ trợ người khiếm thị:</strong> Đọc nội dung trên ảnh/sách báo thành âm thanh.</li>
+                            <li><strong>Số hóa:</strong> Chuyển văn bản giấy sang file mềm.</li>
+                            <li><strong>Trích xuất:</strong> Đọc biển số, CMND.</li>
                         </ul>`,
-        req: '<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>.<br><strong>Endpoint:</strong> <code>api.ocr.space/parse/image</code>',
+        req: `<strong>Yêu cầu:</strong> API Key. Thư viện <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>api.ocr.space/parse/image</code><br>
+                      <strong>Cách lấy Key:</strong><br>
+                      1. Truy cập <code>ocr.space/ocrapi</code>.<br>
+                      2. Nhập email để nhận Key miễn phí ngay lập tức.`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Hỗ trợ nhiều ngôn ngữ (có tiếng Việt), miễn phí 25.000 req/tháng.</li>
-                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Không xử lý tốt chữ viết tay quá xấu hoặc ảnh bị mờ/nhòe.</li>
+                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Hỗ trợ tiếng Việt, miễn phí 25k req/tháng.</li>
+                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Kém hiệu quả với chữ viết tay xấu.</li>
                            </ul>`,
       },
       en: {
-        def: '<strong>Description:</strong> Optical Character Recognition (OCR) service that converts images or PDF files containing text into editable text formats (Text/JSON).',
+        def: '<strong>Description:</strong> Convert images/PDFs to text (OCR).',
         usage: `<ul>
-                            <li><strong>Document Digitization:</strong> Convert paper contracts and invoices into soft files for storage.</li>
-                            <li><strong>Data Extraction:</strong> Automatically read ID numbers or license plates from photos.</li>
-                            <li><strong>Accessibility:</strong> Read text from images/books aloud for the visually impaired.</li>
+                            <li><strong>Digitization:</strong> Paper to digital text.</li>
+                            <li><strong>Extraction:</strong> Read ID cards, plates.</li>
                         </ul>`,
-        req: '<strong>Req:</strong> API Key. Lib <code>requests</code>.<br><strong>Endpoint:</strong> <code>api.ocr.space/parse/image</code>',
+        req: `<strong>Req:</strong> API Key. Lib <code>requests</code>.<br>
+                      <strong>Endpoint:</strong> <code>api.ocr.space/parse/image</code><br>
+                      <strong>Get Key:</strong><br>
+                      1. Go to <code>ocr.space/ocrapi</code>.<br>
+                      2. Enter email to get free Key instantly.`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Pros:</strong> Supports many languages (including Vietnamese), free 25,000 reqs/month.</li>
-                               <li style="color:#ce9178"><strong>Cons:</strong> Struggles with very poor handwriting or blurry images.</li>
+                               <li style="color:#4caf50"><strong>Pros:</strong> Supports Vietnamese, 25k free reqs/mo.</li>
+                               <li style="color:#ce9178"><strong>Cons:</strong> Poor with bad handwriting.</li>
                            </ul>`,
       },
     },
@@ -1239,29 +1313,35 @@ const demoData = {
     filePath: './assets/codes/TranslateAPI.py',
     langData: {
       vi: {
-        def: '<strong>Mô tả:</strong> Thư viện Python sử dụng Google Translate API miễn phí (Unofficial). Hỗ trợ dịch thuật tự động và phát hiện ngôn ngữ (Auto Detect) với độ chính xác cao.',
+        def: '<strong>Mô tả:</strong> Thư viện Python dùng Google Translate API miễn phí.',
         usage: `<ul>
-                            <li><strong>Chatbot đa ngữ:</strong> Tự động dịch tin nhắn giữa người dùng các nước khác nhau.</li>
-                            <li><strong>Học tập & Tra cứu:</strong> Xây dựng từ điển hoặc công cụ học ngoại ngữ.</li>
-                            <li><strong>Bản địa hóa:</strong> Dịch nhanh nội dung website/app sang tiếng địa phương.</li>
+                            <li><strong>Chatbot:</strong> Dịch đa ngữ.</li>
+                            <li><strong>Học tập:</strong> Tra từ điển.</li>
                         </ul>`,
-        req: '<strong>Yêu cầu:</strong> Python & <code>googletrans</code>.<br><strong>Endpoint:</strong> <code>translate.google.com</code>',
+        req: `<strong>Yêu cầu:</strong> Python & <code>googletrans</code>.<br>
+                      <strong>Endpoint:</strong> <code>translate.google.com</code><br>
+                      <strong>Cách lấy Key:</strong><br>
+                      ✅ Thư viện này dùng endpoint công khai.<br>
+                      👉 Không cần đăng ký API Key.`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Hoàn toàn miễn phí, hỗ trợ hơn 100 ngôn ngữ, dễ sử dụng.</li>
-                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Không ổn định (do là bản không chính thức), có thể bị chặn nếu gọi quá nhiều.</li>
+                               <li style="color:#4caf50"><strong>Ưu điểm:</strong> Miễn phí, hỗ trợ 100+ ngôn ngữ.</li>
+                               <li style="color:#ce9178"><strong>Nhược điểm:</strong> Không ổn định (Unofficial).</li>
                            </ul>`,
       },
       en: {
-        def: '<strong>Description:</strong> Unofficial Python library using the free Google Translate API. Supports automatic translation and language detection with high accuracy.',
+        def: '<strong>Description:</strong> Unofficial Python lib for Google Translate.',
         usage: `<ul>
-                            <li><strong>Multilingual Chatbots:</strong> Auto-translate messages between users of different countries.</li>
-                            <li><strong>Learning & Reference:</strong> Build dictionaries or language learning tools.</li>
-                            <li><strong>Localization:</strong> Quickly translate website/app content into local languages.</li>
+                            <li><strong>Chatbot:</strong> Multi-lang chat.</li>
+                            <li><strong>Learning:</strong> Dictionary.</li>
                         </ul>`,
-        req: '<strong>Req:</strong> Python & <code>googletrans</code>.<br><strong>Endpoint:</strong> <code>translate.google.com</code>',
+        req: `<strong>Req:</strong> Python & <code>googletrans</code>.<br>
+                      <strong>Endpoint:</strong> <code>translate.google.com</code><br>
+                      <strong>Get Key:</strong><br>
+                      ✅ Uses public endpoint.<br>
+                      👉 No API Key required.`,
         prosCons: `<ul>
-                               <li style="color:#4caf50"><strong>Pros:</strong> Completely free, supports 100+ languages, easy to use.</li>
-                               <li style="color:#ce9178"><strong>Cons:</strong> Unstable (unofficial), may be blocked if excessive requests are made.</li>
+                               <li style="color:#4caf50"><strong>Pros:</strong> Free, 100+ languages.</li>
+                               <li style="color:#ce9178"><strong>Cons:</strong> Unstable (Unofficial).</li>
                            </ul>`,
       },
     },

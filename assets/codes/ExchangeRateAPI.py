@@ -8,7 +8,7 @@ target_currency = "VND" # Tiền tệ muốn đổi
 
 url = f"https://v6.exchangerate-api.com/v6/{api_key}/latest/{base_currency}"
 
-print(f">>> Dang lay du lieu ty gia tu thi truong ({base_currency})...")
+print(f">> >Dang lay du lieu ty gia tu thi truong ({base_currency})...")
 
 # 2. Gửi request
 response = requests.get(url)
